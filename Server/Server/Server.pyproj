@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>e226bd14-147d-4ec6-924d-25cc305bd307</ProjectGuid>
+    <ProjectGuid>0395ed5c-7881-43cf-8a42-5f335a6e37ed</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>Server.py</StartupFile>
     <SearchPath>
@@ -12,6 +12,9 @@
     <OutputPath>.</OutputPath>
     <Name>Server</Name>
     <RootNamespace>Server</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>9a7a9026-48c1-4688-9d5d-e5699d47d074</InterpreterId>
+    <InterpreterVersion>2.7</InterpreterVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
