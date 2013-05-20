@@ -1,18 +1,19 @@
 # coding=cp949
 
 from socket import *
-import thread
+from thread import start_new_thread
 
-BUFF = 1024
-HOST = '127.0.0.1'
-PORT = 52301
+host = ''
+port = 52301
+backlog = 5
+recvlen = 1024
 
 def response(key):
     return key
 
 def handler(clientsock, addr):
     while 1:
-        data = clientsock.recv(BUFF)
+        data = clientsock.recv(recvlen)
         if not data: break
         print repr(addr) + ' recv:' + repr(data)
         clientsock.send(response(data))
@@ -24,10 +25,10 @@ def handler(clientsock, addr):
 if __name__ == '__main__':
     serversock = socket(AF_INET, SOCK_STREAM)
     serversock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-    serversock.bind((HOST, PORT)) # gethostname()
-    serversock.listen(100)
+    serversock.bind((host, port))
+    serversock.listen(backlog)
     while 1:
-        print 'waiting for connection ... '
+        print 'waiting ...',
         clientsock, addr = serversock.accept()
         print 'connected from:', addr
-        thread.start_new_thread(handler, (clientsock, addr))
+        start_new_thread(handler, (clientsock, addr))
