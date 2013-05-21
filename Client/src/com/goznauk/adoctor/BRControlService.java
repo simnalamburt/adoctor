@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 /**
  * Broadcast receiver
- * @author 훈존
+ * @author Cohi H.John
  */
 public class BRControlService extends Service {
 

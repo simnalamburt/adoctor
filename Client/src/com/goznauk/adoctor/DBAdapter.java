@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 /**
  * DBMS를 돕는 utility 클래스
- * @author 훈존
+ * @author Cohi H.John
  */
 public class DBAdapter {
 	private DatabaseHelper mHelper; // SQLiteOpenHelper : db create, open,
