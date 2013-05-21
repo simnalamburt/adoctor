@@ -9,6 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+/**
+ * Broadcast receiver로서, Screen on, off 될 때 Broadcast를 받아 DB에 시간과 함께 기록
+ * @author 훈존
+ *
+ */
 public class ScreenStateReceiver extends BroadcastReceiver {
 
 	public static boolean screenstate;

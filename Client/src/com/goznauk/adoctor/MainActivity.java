@@ -12,8 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * MainActivity
- * @author Cohi H.John
+ * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌
+ * 일단은 전부 보여주게 코딩함
+ * @author 훈존
+ *
  */
 public class MainActivity extends Activity {
 
@@ -55,6 +57,7 @@ public class MainActivity extends Activity {
 
 	/**
 	 * 새로고침 버튼 누르면 호출됨
+	 * DB의 내용을 가져와 TextView에 뿌려줌
 	 */
 	public void refresh() {
 		DBAdapter adb = new DBAdapter(this, DBAdapter.SQL_CREATE_SCRLOG, "scrlog");

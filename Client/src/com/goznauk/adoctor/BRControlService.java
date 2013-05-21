@@ -7,8 +7,9 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 /**
- * Broadcast receiver
- * @author Cohi H.John
+ * ScreenStateReceiver를 등록하는 Service
+ * @author 훈존
+ * 
  */
 public class BRControlService extends Service {
 
@@ -27,6 +28,9 @@ public class BRControlService extends Service {
 	}
 
 	@Override
+	/**
+	 * ScreenStateReceiver 등록
+	 */
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 

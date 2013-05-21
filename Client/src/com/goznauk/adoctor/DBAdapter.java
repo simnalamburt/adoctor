@@ -10,7 +10,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 /**
  * DBMS를 돕는 utility 클래스
- * @author Cohi H.John
+ * @author 훈존
+ * 
  */
 public class DBAdapter {
 	private DatabaseHelper mHelper; // SQLiteOpenHelper : db create, open,
@@ -24,8 +25,11 @@ public class DBAdapter {
 
 	private static String TABLE_NAME;
 
-	// 여러 테이블을 이용할 경우 아래처럼 테이블을 생성하기 위한 sql만 담아서 범용적으로
-	// DBAdapter 클래스를 사용하는게 좋다.
+	// DB 생성문
+	/**
+	 * SCRLOG DB의 생성문
+	 * _ID, TIME, SCREENSTATE
+	 */
 	public static final String SQL_CREATE_SCRLOG = "create table if not exists " + TABLE_NAME + 
 													" (_ID INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 													" TIME TEXT NOT NULL," + 
@@ -33,7 +37,11 @@ public class DBAdapter {
 
 	private final Context mCxt;
 
-	// DB를 open, update, drop 시키는 역할의 SQLiteOpenHelper 클래스
+	/**
+	 * DB를 open, update, drop 시키는 역할의 SQLiteOpenHelper 클래스
+	 * @author 훈존
+	 *
+	 */
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
 		public DatabaseHelper(Context context) {
@@ -71,38 +79,68 @@ public class DBAdapter {
 	// Main에서 context와 sql명, tableName을 전해주면서 new할 경우 호출된다.
 
 	/**
-	 * DBAdapter를 이용하고자 하는 곳에서 생성자에 table 생성 sql과 table명만 주고 이용해라.
-	 * @param cxt
-	 * @param sql
-	 * @param tableName
+	 * DBAdapter 생성자
+	 * DBAdapter를 받을 context와, 만들 table의 SQL 생성문, 이름을 받아 DBAdapter객체를 만든다. 
+	 * @param cxt context
+	 * @param sql SQL 생성문, SQL_CREATE_SCRLOG은 SCRLOG 생성문
+	 * @param tableName SQL TABLE NAME
 	 */
 	public DBAdapter(Context cxt, String sql, String tableName) {
 		this.mCxt = cxt;
 		SQL_TABLE_CREATE = sql;
 		TABLE_NAME = tableName;
 	}
-
+	
+	/**
+	 * 외부에서 DB를 사용하겠다고 요청이 들어오면 Helper를 이용해서 DB를 open하고 자신의 클래스를 리턴
+	 * @return DBAdapter
+	 * @throws SQLException
+	 */
 	public DBAdapter open() throws SQLException {
-		// 외부에서 db를 사용하겠다고 요청이 들어오면 Helper를 이용해서 db를 open하고
-		// 자신의 클래스를 리턴
+		// 
 		mHelper = new DatabaseHelper(mCxt); // SQLiteOpenHelper에게 context를 넘겨준다.
 		mDb = mHelper.getWritableDatabase();
 		return this;
 	}
 
+	/**
+	 * DBAdapter 닫기
+	 */
 	public void close() {
 		mHelper.close();
 	}
 
 	// insert, delete, select, update의 db기본 기능 수행
+	
+	/**
+	 * ContentValues 객체를 받아 DB에 insert 한다.
+	 * @param values
+	 * @return
+	 */
 	public long insertTable(ContentValues values) {
 		return mDb.insert(TABLE_NAME, null, values);
 	}
 
+	/**
+	 * 
+	 * @param pkColumn
+	 * @param pkData
+	 * @return
+	 */
 	public boolean deleteTable(String pkColumn, long pkData) {
 		return mDb.delete(TABLE_NAME, pkColumn + "=" + pkData, null) > 0;
 	}
 
+	/**
+	 * 
+	 * @param columns
+	 * @param selection
+	 * @param selectionArgs
+	 * @param groupBy
+	 * @param having
+	 * @param orderBy
+	 * @return
+	 */
 	public Cursor selectTable(String[] columns, String selection,
 			String[] selectionArgs, String groupBy, String having,
 			String orderBy) {
@@ -110,6 +148,13 @@ public class DBAdapter {
 				groupBy, having, orderBy);
 	}
 
+	/**
+	 * 
+	 * @param values
+	 * @param pkColumn
+	 * @param pkData
+	 * @return
+	 */
 	public boolean updateTable(ContentValues values, String pkColumn,
 			long pkData) {
 		return mDb.update(TABLE_NAME, values, pkColumn + "=" + pkData, null) > 0;
