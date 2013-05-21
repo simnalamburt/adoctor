@@ -22,11 +22,11 @@ public class ADoctorMain extends Activity
     public void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "OnCreate È£ÃâµÊ");
+        Log.i(TAG, "OnCreate í˜¸ì¶œë¨");
         
         setContentView(R.layout.adoctor_main);
         ResultView = (TextView)findViewById(R.id.resultView);
-        Log.i(TAG, "È­¸é ±¸¼ºµÊ");
+        Log.i(TAG, "í™”ë©´ êµ¬ì„±ë¨");
 		
 		/*		
 		int ch;
@@ -53,7 +53,7 @@ public class ADoctorMain extends Activity
 		
 		//Result to sResult to TextView
 		String sResult = Result.toString();
-		/* ¿ª¼ø Ãâ·Â
+		/* ì—­ìˆœ ì¶œë ¥
 		String[] lines = sResult.split("\n");
 	    Result.delete(0, Result.length());
 		for (int i = lines.length -1; i>=0; i--) {

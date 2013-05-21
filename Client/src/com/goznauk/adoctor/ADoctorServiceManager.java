@@ -8,7 +8,7 @@ import android.content.Intent;
 public class ADoctorServiceManager extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// ºÎÆÃ ½Ã ¼­ºñ½º ½ÇÇà
+		// ë¶€íŒ… ì‹œ ì„œë¹„ìŠ¤ ì‹¤í–‰
 		if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 			Intent toServiceIntent = new Intent(context, ADoctorService.class);
 			context.startService(toServiceIntent);
