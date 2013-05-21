@@ -25,15 +25,15 @@ public class ADoctorService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		Toast.makeText(this, "Service onCreated", Toast.LENGTH_SHORT).show();
-		Log.i(TAG, "Service OnCreate »£√‚µ ");
+		Log.i(TAG, "Service OnCreate Ìò∏Ï∂úÎê®");
 		
-		//file check, æ¯¿∏∏È ª˝º∫
+		//file check, ÏóÜÏúºÎ©¥ ÏÉùÏÑ±
 		
 		
 		Toast.makeText(this, "File Checked", Toast.LENGTH_SHORT).show();
 		Log.i(TAG, "File Checked");
 		
-		//Receiver µÓ∑œ
+		//Receiver Îì±Î°ù
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intent.ACTION_SCREEN_ON);
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -56,7 +56,7 @@ public class ADoctorService extends Service {
 		Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show();
 		Log.i(TAG, "onStartCommand");
 		
-		//log file ±‚∑œ
+		//log file Í∏∞Î°ù
 		String text = intent.getStringExtra("time") + " : "
 	              + intent.getBooleanExtra("screen_state", true);
 		
@@ -92,12 +92,12 @@ public class ADoctorService extends Service {
 			} catch (Exception e) { ; }
 		}
 		
-		Log.i(TAG, "File ±‚∑œµ ");
-		Toast.makeText(this, "File ±‚∑œµ ", Toast.LENGTH_SHORT).show();
+		Log.i(TAG, "File Í∏∞Î°ùÎê®");
+		Toast.makeText(this, "File Í∏∞Î°ùÎê®", Toast.LENGTH_SHORT).show();
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 			
 		
-		//Receiver µÓ∑œ
+		//Receiver Îì±Î°ù
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intent.ACTION_SCREEN_ON);
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -109,7 +109,7 @@ public class ADoctorService extends Service {
 		//STICKY
 		return START_STICKY;
 		
-		//Foreground √≥∏Æ
+		//Foreground Ï≤òÎ¶¨
 	}
 	
 	@Override
