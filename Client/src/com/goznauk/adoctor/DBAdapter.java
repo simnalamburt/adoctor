@@ -25,13 +25,6 @@ public class DBAdapter {
 
 	private static String TABLE_NAME;
 
-	// DB 생성문
-	/**
-	 * SCRLOG DB의 생성문
-	 * _ID, TIME, SCREENSTATE
-	 */
-	public static String SQL_CREATE_SCRLOG;
-
 	private final Context mCxt;
 
 	/**
@@ -82,11 +75,15 @@ public class DBAdapter {
 	 * @param sql SQL 생성문, SQL_CREATE_SCRLOG은 SCRLOG 생성문
 	 * @param tableName SQL TABLE NAME
 	 */
-	public DBAdapter(Context cxt, String sql, String tableName) {
+	public DBAdapter(Context cxt, String tableName) {
 		this.mCxt = cxt;
-		SQL_TABLE_CREATE = sql;
 		TABLE_NAME = tableName;
-		SQL_CREATE_SCRLOG = "create table if not exists " + TABLE_NAME + 
+		// DB 생성문
+		/**
+		 * SCRLOG DB의 생성문
+		 * _ID, TIME, SCREENSTATE
+		 */
+		SQL_TABLE_CREATE = "create table if not exists " + TABLE_NAME + 
 				" (_ID INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 				" TIME TEXT NOT NULL," + 
 				" SCREENSTATE TEXT" + ")";

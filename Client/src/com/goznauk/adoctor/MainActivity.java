@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
 	 * DB의 내용을 가져와 TextView에 뿌려줌
 	 */
 	public void refresh() {
-		DBAdapter adb = new DBAdapter(this, DBAdapter.SQL_CREATE_SCRLOG, "scrlog");
+		DBAdapter adb = new DBAdapter(this, "scrlog");
 		adb.open();
 
 		String columns[] = { "time", "screenstate" };
