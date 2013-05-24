@@ -30,10 +30,7 @@ public class DBAdapter {
 	 * SCRLOG DB의 생성문
 	 * _ID, TIME, SCREENSTATE
 	 */
-	public static final String SQL_CREATE_SCRLOG = "create table if not exists " + TABLE_NAME + 
-													" (_ID INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-													" TIME TEXT NOT NULL," + 
-													" SCREENSTATE TEXT" + ")";
+	public static String SQL_CREATE_SCRLOG;
 
 	private final Context mCxt;
 
@@ -89,6 +86,10 @@ public class DBAdapter {
 		this.mCxt = cxt;
 		SQL_TABLE_CREATE = sql;
 		TABLE_NAME = tableName;
+		SQL_CREATE_SCRLOG = "create table if not exists " + TABLE_NAME + 
+				" (_ID INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+				" TIME TEXT NOT NULL," + 
+				" SCREENSTATE TEXT" + ")";
 	}
 	
 	/**
