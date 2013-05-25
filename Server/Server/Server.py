@@ -33,7 +33,6 @@ if __name__ == '__main__':
     serversock.bind((host, port))
     serversock.listen(backlog)
     while 1:
-        print 'waiting ...',
         clientsock, addr = serversock.accept()
         print 'connected from:', addr
         start_new_thread(handler, (clientsock, addr))
