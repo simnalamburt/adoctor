@@ -32,7 +32,7 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 		SimpleDateFormat sdf = new SimpleDateFormat("yy,MM,dd,hh,mm,ss");
 		time = sdf.format(dtime);
 
-		DBAdapter adb = new DBAdapter(context, "srclog");
+		DBAdapter adb = new DBAdapter(context, "scrlog");
 		adb.open();
 
 		ContentValues cv = new ContentValues();
