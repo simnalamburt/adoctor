@@ -1,2 +1,2 @@
 @echo off
-java -jar TestClient.jar -host localhost
+java -jar TestClient.jar
