@@ -5,21 +5,22 @@ from thread import start_new_thread
 
 host = ''
 port = 52301
+msglen = 1024
+encoding = 'UTF-8'
 backlog = 5
-recvlen = 1024
 
-def response(key):
+def respond(key):
     return key
 
 # 사용자 연결 핸들러 정의
 def handler(clientsock, addr):
     while 1:
-        data = clientsock.recv(recvlen)
+        data = clientsock.recv(msglen)
         if not data: break
-        print repr(addr) + ' recv:' + repr(data)
-        clientsock.send(response(data))
-        print repr(addr) + ' sent:' + repr(response(data))
-
+        print str(addr) + ' recv:' + unicode(data, encoding)
+        response = respond(data)
+        clientsock.send(response)
+        print str(addr) + ' sent:' + unicode(response, encoding)
     clientsock.close()
     print repr(addr), '- closed connection'
 

@@ -29,12 +29,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// TODO : 디버그용 메세지
-		Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
-
-		// Intent intent = new Intent(this, BRControlService.class);
-		// startService(intent);
-
 		mTV = (TextView) findViewById(R.id.textview);
 
 		// Start Service 버튼 onClick 이벤트 핸들러에 이벤트 등록
