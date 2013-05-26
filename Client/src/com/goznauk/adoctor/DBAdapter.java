@@ -163,3 +163,5 @@ public class DBAdapter {
 		mDb.execSQL(query);
 	}
 }
+
+// TODO : 클래스 설계 이상함

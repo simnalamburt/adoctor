@@ -21,17 +21,20 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+
+		boolean screenstate;
+		if (intent.getAction().equals(iON)) screenstate = ON;
+		else if (intent.getAction().equals(iOFF)) screenstate = OFF;
+		else return;
+		
+		ContentValues cv = new ContentValues();
+		cv.put("time", System.currentTimeMillis());
+		cv.put("screenstate", screenstate);
+		
 		// TODO : 하드코딩 (테이블 이름)
 		DBAdapter adb = new DBAdapter(context, "scrlog");
 		adb.open();
-
-		ContentValues cv = new ContentValues();
-		cv.put("time", System.currentTimeMillis());
-		if (intent.getAction().equals(iON)) cv.put("screenstate", ON);
-		else if (intent.getAction().equals(iOFF)) cv.put("screenstate", OFF);
-
 		adb.insertTable(cv);
-
 		adb.close();
 	}
 }
