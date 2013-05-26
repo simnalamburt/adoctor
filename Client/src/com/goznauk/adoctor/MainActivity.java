@@ -36,13 +36,9 @@ public class MainActivity extends Activity {
 		Button button = (Button) findViewById(R.id.startservicebtn);
 		button.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				try {
-					Intent intent = new Intent(mCtx, BRControlService.class);
-					startService(intent);
-				} catch (Exception e) {
-					Toast.makeText(mCtx, e.getMessage(), Toast.LENGTH_LONG)
-							.show();
-				}
+				Intent intent = new Intent(mCtx, BRControlService.class);
+				// TODO : 사후에 활성화시킬것
+				//startService(intent);
 			}
 		});
 
@@ -53,6 +49,16 @@ public class MainActivity extends Activity {
 				refresh();
 			}
 		});
+		
+		// TODO : 디버그 끝나면 삭제할것
+		Intent intent = new Intent(mCtx, BRControlService.class);
+		try
+		{
+			startService(intent);
+		} catch(Exception e)
+		{
+			
+		}
 	}
 
 	/**
