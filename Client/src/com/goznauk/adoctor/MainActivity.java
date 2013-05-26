@@ -35,16 +35,7 @@ public class MainActivity extends Activity {
 		Button button = (Button) findViewById(R.id.startservicebtn);
 		button.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(mCtx, BRControlService.class);
-				startService(intent);
-			}
-		});
-
-		// Refresh 버튼 onClick 이벤트 핸들러에 이벤트 등록
-		Button RefreshBtn = (Button) findViewById(R.id.refreshbtn);
-		RefreshBtn.setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
-				refresh();
+				startService(new Intent(mCtx, BRControlService.class));
 			}
 		});
 	}
@@ -52,12 +43,12 @@ public class MainActivity extends Activity {
 	/**
 	 * 새로고침 버튼 누르면 호출됨 DB의 내용을 가져와 TextView에 뿌려줌
 	 */
-	public void refresh() {
-		// TODO : 하드코딩
+	public void onRefreshButton(View v) {
+		// TODO : 하드코딩 (테이블 이름)
 		DBAdapter adb = new DBAdapter(this, "scrlog");
 		adb.open();
 
-		// TODO : 하드코딩
+		// TODO : 하드코딩 (칼럼 이름)
 		String columns[] = { "time", "screenstate" };
 		Cursor c = adb.selectTable(columns, null, null, null, null, null);
 
@@ -73,7 +64,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void delete() {
-		// TODO : 하드코딩
+		// TODO : 하드코딩 (테이블 이름)
 		DBAdapter adb = new DBAdapter(this, "scrlog");
 		adb.open();
 		adb.query("DELETE FROM scrlog");

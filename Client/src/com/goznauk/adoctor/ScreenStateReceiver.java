@@ -13,6 +13,7 @@ import android.content.Intent;
  */
 public class ScreenStateReceiver extends BroadcastReceiver {
 
+	// TODO : 하드코딩 (ENUM)
 	private static final boolean ON = true;
 	private static final boolean OFF = false;
 	private static final String iON = Intent.ACTION_SCREEN_ON;
@@ -20,6 +21,7 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		// TODO : 하드코딩 (테이블 이름)
 		DBAdapter adb = new DBAdapter(context, "scrlog");
 		adb.open();
 

@@ -15,11 +15,6 @@ public class BRControlService extends Service {
 	ScreenStateReceiver mScreenStateReceiver = new ScreenStateReceiver();
 
 	@Override
-	public void onCreate() {
-		super.onCreate();
-	}
-
-	@Override
 	/**
 	 * ScreenStateReceiver 등록
 	 */
@@ -33,15 +28,10 @@ public class BRControlService extends Service {
 
 		return START_STICKY;
 	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		// service destroyed log method
-	}
 	
 	@Override
 	public IBinder onBind(Intent intent) {
+		// TODO : 어떤 효과가 발생하는건지?
 		return null;
 	}
 }
