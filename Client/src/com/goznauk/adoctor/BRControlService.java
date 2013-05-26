@@ -22,12 +22,6 @@ public class BRControlService extends Service {
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		// service destroyed log method
-	}
-
-	@Override
 	/**
 	 * ScreenStateReceiver 등록
 	 */
@@ -47,6 +41,12 @@ public class BRControlService extends Service {
 		return START_STICKY;
 	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		// service destroyed log method
+	}
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;

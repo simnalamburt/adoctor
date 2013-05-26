@@ -24,9 +24,9 @@
         </activity>
 
         <service
-            android:name="BRControlService"
+            android:name=".BRControlService"
             android:enabled="true"
-            android:isolatedProcess="true"
+            android:isolatedProcess="false"
             android:stopWithTask="false" >
         </service>
 
