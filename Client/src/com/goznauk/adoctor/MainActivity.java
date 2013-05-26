@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
 		String columns[] = { "time", "screenstate" };
 		Cursor c = adb.selectTable(columns, null, null, null, null, null);
 
-		mTV.setText("Screen State Log");
+		mTV.setText("Screen State Log \n");
 
 		if (c.moveToFirst()) {
 			do {
