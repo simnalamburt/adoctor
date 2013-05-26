@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌
@@ -71,10 +71,23 @@ public class MainActivity extends Activity {
 		adb.close();
 	}
 
+	public void delete() {
+		DBAdapter adb = new DBAdapter(this, "scrlog");
+		adb.open();
+		adb.query("DELETE FROM scrlog");
+		adb.close();
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		delete();
+		return super.onOptionsItemSelected(item);
 	}
 }

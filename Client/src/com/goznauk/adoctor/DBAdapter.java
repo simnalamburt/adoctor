@@ -154,4 +154,12 @@ public class DBAdapter {
 			long pkData) {
 		return mDb.update(TABLE_NAME, values, pkColumn + "=" + pkData, null) > 0;
 	}
+	
+	/**
+	 * query를 받아 DB에 적용한다.
+	 * @param query
+	 */
+	public void query(String query) {
+		mDb.execSQL(query);
+	}
 }
