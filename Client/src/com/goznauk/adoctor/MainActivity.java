@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌 일단은 전부 보여주게 코딩함
@@ -60,11 +59,11 @@ public class MainActivity extends Activity {
 		String columns[] = { "time", "screenstate" };
 		Cursor c = adb.selectTable(columns, null, null, null, null, null);
 
-		mTV.setText("Screen State Log \n");
+		mTV.setText("● Screen State Log \n");
 
 		if (c.moveToFirst()) {
 			do {
-				mTV.append(c.getLong(0) + ":" + c.getString(1) + "\n");
+				mTV.append(c.getLong(0) + "\t" + c.getString(1) + "\n");
 			} while (c.moveToNext());
 		}
 		adb.close();

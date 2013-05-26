@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 /**
  * Broadcast receiver로서, Screen on, off 될 때 Broadcast를 받아 DB에 시간과 함께 기록
@@ -23,8 +22,6 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Toast.makeText(context, "onReceive", Toast.LENGTH_SHORT).show();
-
 		time = System.currentTimeMillis();
 
 		DBAdapter adb = new DBAdapter(context, "scrlog");
@@ -39,9 +36,6 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 			cv.put("screenstate", screenstate);
 			adb.insertTable(cv);
 			adb.close();
-
-			Toast.makeText(context,"BR catched screen is on" + time + screenstate,
-							Toast.LENGTH_SHORT).show();
 		}
 		if (intent.getAction().equals(iOFF)) {
 			screenstate = OFF;
