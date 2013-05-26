@@ -27,29 +27,14 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 		DBAdapter adb = new DBAdapter(context, "scrlog");
 		adb.open();
 
+		if (intent.getAction().equals(iON)) screenstate = ON;
+		else if (intent.getAction().equals(iOFF)) screenstate = OFF;
+		
 		ContentValues cv = new ContentValues();
-
-		if (intent.getAction().equals(iON)) {
-			screenstate = ON;
-
-			cv.put("time", time);
-			cv.put("screenstate", screenstate);
-			adb.insertTable(cv);
-			adb.close();
-		}
-		if (intent.getAction().equals(iOFF)) {
-			screenstate = OFF;
-
-			cv.put("time", time);
-			cv.put("screenstate", screenstate);
-			adb.insertTable(cv);
-			adb.close();
-
-		}
-
-		// Intent toServiceIntent = new Intent(context, BRControlService.class);
-		// toServiceIntent.putExtra("screenstate", screenstate)
-		// .putExtra("time", time);
-		// context.startService(toServiceIntent);
+		cv.put("time", time);
+		cv.put("screenstate", screenstate);
+		adb.insertTable(cv);
+		
+		adb.close();
 	}
 }

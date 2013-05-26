@@ -53,23 +53,27 @@ public class MainActivity extends Activity {
 	 * 새로고침 버튼 누르면 호출됨 DB의 내용을 가져와 TextView에 뿌려줌
 	 */
 	public void refresh() {
+		// TODO : 하드코딩
 		DBAdapter adb = new DBAdapter(this, "scrlog");
 		adb.open();
 
+		// TODO : 하드코딩
 		String columns[] = { "time", "screenstate" };
 		Cursor c = adb.selectTable(columns, null, null, null, null, null);
 
-		mTV.setText("● Screen State Log \n");
-
+		String msg = "● Screen State Log \n";
 		if (c.moveToFirst()) {
-			do {
-				mTV.append(c.getLong(0) + "\t" + c.getString(1) + "\n");
-			} while (c.moveToNext());
+			do msg += c.getLong(0) + ' ' + c.getString(1) + '\n';
+			while (c.moveToNext());
 		}
+
 		adb.close();
+
+		mTV.setText(msg);
 	}
 
 	public void delete() {
+		// TODO : 하드코딩
 		DBAdapter adb = new DBAdapter(this, "scrlog");
 		adb.open();
 		adb.query("DELETE FROM scrlog");

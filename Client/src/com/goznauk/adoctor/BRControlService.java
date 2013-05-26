@@ -26,9 +26,6 @@ public class BRControlService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 
-		// String text = intent.getStringExtra("time") + " : "
-		// + intent.getBooleanExtra("screen_state", true);
-
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Intent.ACTION_SCREEN_ON);
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
