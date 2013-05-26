@@ -82,7 +82,7 @@ public class DBAdapter {
 		 */
 		SQL_TABLE_CREATE = "create table if not exists " + TABLE_NAME + 
 				" (_ID INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-				" TIME TEXT NOT NULL," + 
+				" TIME INT NOT NULL," + 
 				" SCREENSTATE TEXT" + ")";
 	}
 	

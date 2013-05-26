@@ -1,8 +1,5 @@
 package com.goznauk.adoctor;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,7 +14,7 @@ import android.widget.Toast;
 public class ScreenStateReceiver extends BroadcastReceiver {
 
 	public static boolean screenstate;
-	public static String time;
+	public static long time;
 
 	private final boolean ON = true;
 	private final boolean OFF = false;
@@ -28,9 +25,7 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Toast.makeText(context, "onReceive", Toast.LENGTH_SHORT).show();
 
-		Date dtime = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yy,MM,dd,hh,mm,ss");
-		time = sdf.format(dtime);
+		time = System.currentTimeMillis();
 
 		DBAdapter adb = new DBAdapter(context, "scrlog");
 		adb.open();

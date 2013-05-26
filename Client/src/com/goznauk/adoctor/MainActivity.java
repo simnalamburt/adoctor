@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 
 		if (c.moveToFirst()) {
 			do {
-				mTV.append(c.getString(0) + ":" + c.getString(1) + "\n");
+				mTV.append(c.getLong(0) + ":" + c.getString(1) + "\n");
 			} while (c.moveToNext());
 		}
 
