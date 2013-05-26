@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 /**
  * Broadcast receiver로서, Screen on, off 될 때 Broadcast를 받아 DB에 시간과 함께 기록
- * @author 훈존
+ * @author Choi H.John, Sky77
  *
  */
 public class ScreenStateReceiver extends BroadcastReceiver {

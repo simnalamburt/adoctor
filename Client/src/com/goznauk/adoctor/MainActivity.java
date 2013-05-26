@@ -10,12 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
- * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌
- * 일단은 전부 보여주게 코딩함
- * @author 훈존
- *
+ * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌 일단은 전부 보여주게 코딩함
+ * 
+ * @author Choi H.John, Sky77
+ * 
  */
 public class MainActivity extends Activity {
 
@@ -35,8 +36,13 @@ public class MainActivity extends Activity {
 		Button button = (Button) findViewById(R.id.startservicebtn);
 		button.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(mCtx, BRControlService.class);
-				startService(intent);
+				try {
+					Intent intent = new Intent(mCtx, BRControlService.class);
+					startService(intent);
+				} catch (Exception e) {
+					Toast.makeText(mCtx, e.getMessage(), Toast.LENGTH_LONG)
+							.show();
+				}
 			}
 		});
 
@@ -50,8 +56,7 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * 새로고침 버튼 누르면 호출됨
-	 * DB의 내용을 가져와 TextView에 뿌려줌
+	 * 새로고침 버튼 누르면 호출됨 DB의 내용을 가져와 TextView에 뿌려줌
 	 */
 	public void refresh() {
 		DBAdapter adb = new DBAdapter(this, "scrlog");
@@ -67,7 +72,6 @@ public class MainActivity extends Activity {
 				mTV.append(c.getLong(0) + ":" + c.getString(1) + "\n");
 			} while (c.moveToNext());
 		}
-
 		adb.close();
 	}
 

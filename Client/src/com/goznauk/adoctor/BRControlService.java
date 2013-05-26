@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 /**
  * ScreenStateReceiver를 등록하는 Service
- * @author 훈존
+ * @author Choi H.John, Sky77
  * 
  */
 public class BRControlService extends Service {
