@@ -29,6 +29,8 @@ public class Main {
 	 * 
 	 * @param args
 	 *            커맨드라인 입력
+	 *            -h, -host [hostname] : 호스트이름 설정. 기본값은 "uriel.upnl.org"
+	 *            -p, -port [number] : 포트번호 변경. 기본값은 52301 
 	 */
 	public static void main(String[] args)
 	{

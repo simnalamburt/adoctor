@@ -9,8 +9,13 @@ msglen = 1024
 encoding = 'UTF-8'
 backlog = 5
 
-def respond(key):
-    return key
+def respond(input):
+    ustr = unicode(input, encoding)
+    ulist = list(ustr)
+    ulist.reverse()
+    ustr = u''.join(ulist)
+    str = ustr.encode(encoding)
+    return str
 
 # 사용자 연결 핸들러 정의
 def handler(clientsock, addr):
@@ -37,7 +42,7 @@ if __name__ == '__main__':
     serversock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     serversock.bind((host, port))
     serversock.listen(backlog)
-    print '● 서버 작동시작'
+    print u'● 서버 작동시작'
     while 1:
         clientsock, addr = serversock.accept()
         start_new_thread(handler, (clientsock, addr))
