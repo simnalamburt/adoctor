@@ -13,7 +13,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Start Service" />
+        android:onClick="onStartserviceButton"
+        android:text="@string/startservice" />
 
     <Button
         android:id="@+id/refreshbtn"
@@ -23,15 +24,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:onClick="onRefreshButton"
-        android:text="Refresh" />
+        android:text="@string/refresh" />
 
     <TextView
-        android:id="@+id/textview"
+        android:id="@+id/logview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/refreshbtn"
         android:layout_below="@+id/refreshbtn"
-        android:layout_marginTop="21dp"
-        android:text="TextView" />
+        android:text="@string/log"
+        android:layout_marginTop="21dp"/>
 
 </RelativeLayout>

@@ -14,10 +14,10 @@ public class BRControlService extends Service {
 
 	ScreenStateReceiver mScreenStateReceiver = new ScreenStateReceiver();
 
-	@Override
 	/**
 	 * ScreenStateReceiver 등록
 	 */
+	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 

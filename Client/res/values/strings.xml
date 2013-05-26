@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">ADoctor</string>
-    <string name="delete">Delete</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="startservice">서비스 시작</string>
+    <string name="refresh">로그 새로고침</string>
+    <string name="log">● Screen State Log \n</string>
+    <string name="delete">로그 삭제</string>
 </resources>

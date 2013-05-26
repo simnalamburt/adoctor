@@ -1,14 +1,12 @@
 package com.goznauk.adoctor;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -19,29 +17,28 @@ import android.widget.TextView;
  */
 public class MainActivity extends Activity {
 
-	Context mCtx = this;
-	TextView mTV;
-
 	/**
 	 * 프로그램 진입점
 	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		mTV = (TextView) findViewById(R.id.textview);
-
-		// Start Service 버튼 onClick 이벤트 핸들러에 이벤트 등록
-		Button button = (Button) findViewById(R.id.startservicebtn);
-		button.setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
-				startService(new Intent(mCtx, BRControlService.class));
-			}
-		});
+	}
+	
+	/**
+	 * 서비스를 시작함
+	 * 서비스 시작 버튼을 눌렀을 때 호출됨
+	 * @param v
+	 */
+	public void onStartserviceButton(View v)
+	{
+		startService(new Intent(this, BRControlService.class));
 	}
 
 	/**
-	 * 새로고침 버튼 누르면 호출됨 DB의 내용을 가져와 TextView에 뿌려줌
+	 * DB의 내용을 가져와 TextView에 뿌려줌
+	 * 새로고침 버튼을 눌렀을 때 호출됨
+	 * @param v 눌러진 버튼 View
 	 */
 	public void onRefreshButton(View v) {
 		// TODO : 하드코딩 (테이블 이름)
@@ -52,38 +49,36 @@ public class MainActivity extends Activity {
 		String columns[] = { "time", "screenstate" };
 		Cursor c = adb.selectTable(columns, null, null, null, null, null);
 
-		String msg = "● Screen State Log \n";
+		String msg = getResources().getString(R.string.log);
 		if (c.moveToFirst()) {
-			do msg += c.getLong(0) + ' ' + c.getString(1) + '\n';
+			do msg += c.getLong(0) + "\t\t\t" + c.getString(1) + '\n';
 			while (c.moveToNext());
 		}
 
 		adb.close();
 
-		mTV.setText(msg);
+		((TextView)findViewById(R.id.logview)).setText(msg);
 	}
 
-	public void delete() {
-		// TODO : 하드코딩 (테이블 이름)
+	/**
+	 * scrlog 테이블의 내용을 비움
+	 * 메뉴의 로그삭제 버튼을 눌렀을 때 호출됨 
+	 * @param i
+	 */
+	public void onDeleteButton(MenuItem i)
+	{
 		DBAdapter adb = new DBAdapter(this, "scrlog");
 		adb.open();
 		adb.query("DELETE FROM scrlog");
 		adb.close();
 	}
-
+	
 	/**
-	 * Inflate the menu; this adds items to the action bar if it is present.
+	 * 메뉴 생성
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO : 나중에 메뉴버튼 늘리면 고쳐야함
-		delete();
-		return super.onOptionsItemSelected(item);
+		return super.onCreateOptionsMenu(menu);
 	}
 }
