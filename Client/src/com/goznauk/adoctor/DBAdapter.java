@@ -14,13 +14,11 @@ import android.database.sqlite.SQLiteOpenHelper;
  * 
  */
 public class DBAdapter {
-	private DatabaseHelper mHelper; // SQLiteOpenHelper : db create, open,
-									// version upgrade
-	private SQLiteDatabase mDb = null; // SQLiteDatabase : insert, query,
-										// delete, update
+	private DatabaseHelper mHelper; // SQLiteOpenHelper : DB create, open, version upgrade
+	private SQLiteDatabase mDb = null; // SQLiteDatabase : insert, query, delete, update
 
-	private static final String DATABASE_NAME = "scrlog.db"; // db 이름
-	private static final int DATABASE_VERSION = 1; // db버젼
+	private static final String DATABASE_NAME = "scrlog.db"; // DB 이름
+	private static final int DATABASE_VERSION = 1; // DB 버전
 	private static String SQL_TABLE_CREATE;
 
 	private static String TABLE_NAME;
@@ -63,8 +61,6 @@ public class DBAdapter {
 
 	}
 
-	// Main에서 context와 sql명, tableName을 전해주면서 new할 경우 호출된다.
-
 	/**
 	 * DBAdapter 생성자
 	 * DBAdapter를 받을 context와, 만들 table의 SQL 생성문, 이름을 받아 DBAdapter객체를 만든다. 
@@ -75,7 +71,7 @@ public class DBAdapter {
 	public DBAdapter(Context cxt, String tableName) {
 		this.mCxt = cxt;
 		TABLE_NAME = tableName;
-		// DB 생성문
+		
 		/**
 		 * SCRLOG DB의 생성문
 		 * _ID, TIME, SCREENSTATE
@@ -105,10 +101,8 @@ public class DBAdapter {
 		mHelper.close();
 	}
 
-	// insert, delete, select, update의 db기본 기능 수행
-	
 	/**
-	 * ContentValues 객체를 받아 DB에 insert 한다.
+	 * ContentValues 객체를 받아 DB에 insert 한다. insert, delete, select, update의 db기본 기능 수행
 	 * @param values
 	 * @return
 	 */
@@ -117,7 +111,7 @@ public class DBAdapter {
 	}
 
 	/**
-	 * 
+	 * 특정 테이블을 삭제해줌
 	 * @param pkColumn
 	 * @param pkData
 	 * @return
@@ -127,7 +121,7 @@ public class DBAdapter {
 	}
 
 	/**
-	 * 
+	 * 테이블 선택
 	 * @param columns
 	 * @param selection
 	 * @param selectionArgs
@@ -144,7 +138,7 @@ public class DBAdapter {
 	}
 
 	/**
-	 * 
+	 * 테이블 업데이트
 	 * @param values
 	 * @param pkColumn
 	 * @param pkData
@@ -163,5 +157,3 @@ public class DBAdapter {
 		mDb.execSQL(query);
 	}
 }
-
-// TODO : 클래스 설계 이상함
