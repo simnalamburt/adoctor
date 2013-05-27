@@ -17,12 +17,18 @@ import android.widget.TextView;
  */
 public class MainActivity extends Activity {
 
+	TextView logview;
+	NetworkTask networking;
+	
 	/**
 	 * 프로그램 진입점
 	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		logview = (TextView) findViewById(R.id.logview);
+		networking = new NetworkTask(this);
 	}
 
 	/**
@@ -58,11 +64,11 @@ public class MainActivity extends Activity {
 
 		adb.close();
 
-		((TextView) findViewById(R.id.logview)).setText(msg);
+		logview.setText(msg);
 	}
 
 	public void onSendButton(View v) {
-		new NetworkTask(this).execute();
+		networking.execute("안드로이드 메세지");
 	}
 
 	/**
