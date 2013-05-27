@@ -24,21 +24,21 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	}
-	
+
 	/**
-	 * 서비스를 시작함
-	 * 서비스 시작 버튼을 눌렀을 때 호출됨
+	 * 서비스를 시작함 서비스 시작 버튼을 눌렀을 때 호출됨
+	 * 
 	 * @param v
 	 */
-	public void onStartserviceButton(View v)
-	{
+	public void onStartserviceButton(View v) {
 		startService(new Intent(this, BRControlService.class));
 	}
 
 	/**
-	 * DB의 내용을 가져와 TextView에 뿌려줌
-	 * 새로고침 버튼을 눌렀을 때 호출됨
-	 * @param v 눌러진 버튼 View
+	 * DB의 내용을 가져와 TextView에 뿌려줌 새로고침 버튼을 눌렀을 때 호출됨
+	 * 
+	 * @param v
+	 *            눌러진 버튼 View
 	 */
 	public void onRefreshButton(View v) {
 		// TODO : 하드코딩 (테이블 이름)
@@ -51,28 +51,32 @@ public class MainActivity extends Activity {
 
 		String msg = getResources().getString(R.string.log);
 		if (c.moveToFirst()) {
-			do msg += c.getLong(0) + "\t\t\t" + c.getString(1) + '\n';
+			do
+				msg += c.getLong(0) + "\t\t\t" + c.getString(1) + '\n';
 			while (c.moveToNext());
 		}
 
 		adb.close();
 
-		((TextView)findViewById(R.id.logview)).setText(msg);
+		((TextView) findViewById(R.id.logview)).setText(msg);
+	}
+
+	public void onSendButton(View v) {
+		new NetworkTask(this).execute();
 	}
 
 	/**
-	 * scrlog 테이블의 내용을 비움
-	 * 메뉴의 로그삭제 버튼을 눌렀을 때 호출됨 
+	 * scrlog 테이블의 내용을 비움 메뉴의 로그삭제 버튼을 눌렀을 때 호출됨
+	 * 
 	 * @param i
 	 */
-	public void onDeleteButton(MenuItem i)
-	{
+	public void onDeleteButton(MenuItem i) {
 		DBAdapter adb = new DBAdapter(this, "scrlog");
 		adb.open();
 		adb.query("DELETE FROM scrlog");
 		adb.close();
 	}
-	
+
 	/**
 	 * 메뉴 생성
 	 */

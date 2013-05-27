@@ -5,4 +5,5 @@
     <string name="refresh">로그 새로고침</string>
     <string name="log">● Screen State Log \n</string>
     <string name="delete">로그 삭제</string>
+    <string name="send">서버로 보내기</string>
 </resources>
