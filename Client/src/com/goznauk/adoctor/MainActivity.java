@@ -94,4 +94,17 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
+
+	/**
+	 * 메뉴 버튼 눌렀을 때 호출됨
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.deletebtn:
+			onDeleteButton(item);
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

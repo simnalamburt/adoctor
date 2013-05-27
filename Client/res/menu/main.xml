@@ -4,6 +4,5 @@
         android:id="@+id/deletebtn"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:onClick="onDeleteButton"
         android:title="@string/delete"/>
 </menu>

@@ -157,3 +157,5 @@ public class DBAdapter {
 		mDb.execSQL(query);
 	}
 }
+
+// TODO : 스레드 안전한가?
