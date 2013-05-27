@@ -18,7 +18,7 @@ import org.apache.commons.cli.ParseException;
  */
 public class Main {
 
-	// TODO : 서버에 따라 변경해야함
+	// TODO : 하드코딩 (서버 설정)
 	private static String host = "uriel.upnl.org";
 	private static int port = 52301;
 	private static final int msglen = 1024;

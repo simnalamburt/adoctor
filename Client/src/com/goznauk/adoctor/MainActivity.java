@@ -18,17 +18,15 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
 	TextView logview;
-	NetworkTask networking;
-	
+
 	/**
 	 * 프로그램 진입점
 	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		logview = (TextView) findViewById(R.id.logview);
-		networking = new NetworkTask(this);
 	}
 
 	/**
@@ -67,10 +65,6 @@ public class MainActivity extends Activity {
 		logview.setText(msg);
 	}
 
-	public void onSendButton(View v) {
-		networking.execute("안드로이드 메세지");
-	}
-
 	/**
 	 * scrlog 테이블의 내용을 비움 메뉴의 로그삭제 버튼을 눌렀을 때 호출됨
 	 * 
@@ -81,6 +75,15 @@ public class MainActivity extends Activity {
 		adb.open();
 		adb.query("DELETE FROM scrlog");
 		adb.close();
+	}
+
+	/**
+	 * 아무 문자열이나 TCP/UTF-8로 서버에 전송. 전송 버튼을 눌렀을 때 호출됨
+	 * TODO : 작업중
+	 * @param v
+	 */
+	public void onSendButton(View v) {
+		new NetworkTask(this).execute("안드로이드 메세지");
 	}
 
 	/**

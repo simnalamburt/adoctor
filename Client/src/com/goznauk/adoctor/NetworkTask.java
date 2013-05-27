@@ -12,13 +12,13 @@ import android.widget.Toast;
 
 /**
  * 안드로이드에서 네트워킹 사용시 호출되는 AsynchTask
- * TODO : 수정중
+ * TODO : 작업중
  * @author Hyeon
  *
  */
 public class NetworkTask extends AsyncTask<String, Void, String> {
 
-	// TODO : 서버에 따라 변경해야함
+	// TODO : 하드코딩 (서버 설정)
 	private static String host = "uriel.upnl.org";
 	private static int port = 52301;
 	private static final int msglen = 1024;
