@@ -20,8 +20,6 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
 	TextView logview;
-	Clock01 mClock01;
-	Handler mHandler;
 
 	/**
 	 * 프로그램 진입점
@@ -31,7 +29,6 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		logview = (TextView) findViewById(R.id.logview);
-		mClock01 = (Clock01) findViewById(R.id.clock01);
 	}
 
 	/**
@@ -112,14 +109,4 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	mHandler = new Handler() {
-                    public void handleMessage(Message msg) {
-                           int Pos;
-                           Pos = mProgress.getPos();
-                           if(Pos<1440)
-                           mClock01.setPos(Pos+1);
-                           mHandler.sendEmptyMessageDelayed(0,60000);//1분마다 쓰레드 불러줌
-                    }
-             };
 }
