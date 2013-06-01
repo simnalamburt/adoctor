@@ -1,4 +1,6 @@
-package com.goznauk.adoctor;
+package com.adoctor.adoctor;
+
+import com.goznauk.adoctor.R;
 
 import android.app.Activity;
 import android.content.Intent;

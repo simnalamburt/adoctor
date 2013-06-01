@@ -1,4 +1,4 @@
-package com.goznauk.adoctor;
+package com.adoctor.adoctor;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.goznauk.adoctor.MainActivity"
+            android:name="com.adoctor.adoctor.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,7 @@
         </activity>
 
         <service
-            android:name=".BRControlService"
+            android:name="com.adoctor.adoctor.BRControlService"
             android:enabled="true"
             android:isolatedProcess="false"
             android:stopWithTask="false" >

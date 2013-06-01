@@ -1,4 +1,4 @@
-package com.goznauk.adoctor;
+package com.adoctor.adoctor;
 
 import android.app.Service;
 import android.content.Intent;
