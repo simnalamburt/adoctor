@@ -35,10 +35,10 @@ public class Main {
 	 *            -h, -host [hostname] : 호스트이름 설정. 기본값은 "uriel.upnl.org"
 	 *            -p, -port [number] : 포트번호 변경. 기본값은 52301 
 	 */
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args)
 	{
-		JSONObject userdata;
-		userdata = new JSONObject();
+		JSONObject userdata = new JSONObject();
 		userdata.put("age", "20");
 		userdata.put("sex", "male");
 		System.out.println(userdata.toString());
