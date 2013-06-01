@@ -2,8 +2,12 @@
 ## Eclipse
 #################
 
+# 프로젝트 설정파일은 유지
+#.project
+#.classpath
+#.settings/
+
 *.pydevproject
-.project
 .metadata
 bin/
 tmp/
@@ -12,8 +16,6 @@ tmp/
 *.swp
 *~.nib
 local.properties
-.classpath
-.settings/
 .loadpath
 
 # External tool builders
