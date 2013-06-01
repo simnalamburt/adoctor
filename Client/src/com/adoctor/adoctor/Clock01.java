@@ -1,4 +1,4 @@
-package com.adoctor.adoctor
+package com.adoctor.adoctor;
 
 import android.content.Context;
 import android.graphics.Canvas;
