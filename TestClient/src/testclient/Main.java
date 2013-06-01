@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -41,8 +41,10 @@ public class Main {
 		userdata = new JSONObject();
 		userdata.put("age", "20");
 		userdata.put("sex", "male");
+		System.out.println(userdata.toString());
 		JSONArray userarray = new JSONArray();
 		userarray.add(userdata);
+		System.out.println(userarray.toString());
 		
 		// 커맨드라인 입력 파싱
 		Options options = new Options();
@@ -80,8 +82,7 @@ public class Main {
 				System.out.print("전송 : ");
 				String input = console.nextLine();
 				if (input.equals("")) break;
-				writer.write(userarray.toString().getBytes(encoding));
-				//writer.write(input.getBytes(encoding));
+				writer.write(input.getBytes(encoding));
 
 				int len = reader.read(buffer);
 				System.out.println("응답 : " + new String(buffer, 0, len, encoding));
