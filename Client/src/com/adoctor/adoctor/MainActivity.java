@@ -1,7 +1,5 @@
 package com.adoctor.adoctor;
 
-import com.goznauk.adoctor.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.goznauk.adoctor.R;
 
 /**
  * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌 일단은 전부 보여주게 코딩함
@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 	 * 프로그램 진입점
 	 */
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -47,23 +48,12 @@ public class MainActivity extends Activity {
 	 *            눌러진 버튼 View
 	 */
 	public void onRefreshButton(View v) {
-		// TODO : 하드코딩 (테이블 이름)
-		DBAdapter adb = new DBAdapter(this, "scrlog");
-		adb.open();
-
-		// TODO : 하드코딩 (칼럼 이름)
-		String columns[] = { "time", "screenstate" };
-		Cursor c = adb.selectTable(columns, null, null, null, null, null);
+		DB.ScreenLog[] logs = DB.ScreenLog.SelectAll();
 
 		String msg = getResources().getString(R.string.log);
-		if (c.moveToFirst()) {
-			do
-				msg += c.getLong(0) + "\t\t\t" + c.getString(1) + '\n';
-			while (c.moveToNext());
-		}
-
-		adb.close();
-
+		for(DB.ScreenLog log : logs)
+			msg += log.Time + "\t\t\t" + log.State + '\n';
+		
 		logview.setText(msg);
 	}
 
@@ -73,10 +63,7 @@ public class MainActivity extends Activity {
 	 * @param i
 	 */
 	public void onDeleteButton(MenuItem i) {
-		DBAdapter adb = new DBAdapter(this, "scrlog");
-		adb.open();
-		adb.query("DELETE FROM scrlog");
-		adb.close();
+		DB.ScreenLog.Flush();
 	}
 
 	/**

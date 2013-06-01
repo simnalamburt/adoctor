@@ -1,7 +1,6 @@
 package com.adoctor.adoctor;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 
@@ -22,19 +21,13 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 
-		boolean screenstate;
-		if (intent.getAction().equals(iON)) screenstate = ON;
-		else if (intent.getAction().equals(iOFF)) screenstate = OFF;
+		long time = System.currentTimeMillis();
+		
+		boolean state;
+		if (intent.getAction().equals(iON)) state = ON;
+		else if (intent.getAction().equals(iOFF)) state = OFF;
 		else return;
 		
-		ContentValues cv = new ContentValues();
-		cv.put("time", System.currentTimeMillis());
-		cv.put("screenstate", screenstate);
-		
-		// TODO : 하드코딩 (테이블 이름)
-		DBAdapter adb = new DBAdapter(context, "scrlog");
-		adb.open();
-		adb.insertTable(cv);
-		adb.close();
+		DB.ScreenLog.Insert(time, state);
 	}
 }
