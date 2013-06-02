@@ -8,10 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.adoctor.adoctor.DB.ScreenLog;
+import com.adoctor.adoctor.DB.ScreenLogEntity;
+
 /**
  * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌 일단은 전부 보여주게 코딩함
  * 
- * @author Choi H.John, Sky77
+ * @author Choi H.John, Sky77, Hyeon
  * 
  */
 public class MainActivity extends Activity {
@@ -44,10 +47,10 @@ public class MainActivity extends Activity {
 	 *            눌러진 버튼 View
 	 */
 	public void onRefreshButton(View v) {
-		ScreenLog[] logs = ScreenLog.SelectAll();
+		ScreenLogEntity[] logs = ScreenLog.getInstance().SelectAll();
 
 		String msg = getResources().getString(R.string.log);
-		for(ScreenLog log : logs)
+		for(ScreenLogEntity log : logs)
 			msg += log.Time + "\t\t\t" + log.State + '\n';
 		
 		logview.setText(msg);
@@ -59,7 +62,7 @@ public class MainActivity extends Activity {
 	 * @param i
 	 */
 	public void onDeleteButton(MenuItem i) {
-		ScreenLog.Flush();
+		ScreenLog.getInstance().Flush();
 	}
 
 	/**

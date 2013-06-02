@@ -13,7 +13,6 @@ import android.widget.Toast;
  * 안드로이드에서 네트워킹 사용시 호출되는 AsynchTask
  * TODO 네트워킹 구현 완성하기
  * @author Hyeon
- *
  */
 public class NetworkTask extends AsyncTask<String, Void, String> {
 

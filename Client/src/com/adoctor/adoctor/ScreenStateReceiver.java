@@ -1,14 +1,15 @@
 package com.adoctor.adoctor;
 
+import com.adoctor.adoctor.DB.ScreenLog;
+import com.adoctor.adoctor.DB.ScreenState;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 /**
  * Broadcast receiver로서, Screen on, off 될 때 Broadcast를 받아 DB에 시간과 함께 기록
- * 
  * @author Choi H.John, Sky77, Hyeon
- * 
  */
 public class ScreenStateReceiver extends BroadcastReceiver {
 	
@@ -17,7 +18,7 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 		ScreenState state = ScreenState.fromStringOrNull(intent.getAction());
 		if (state!=null) {
 			long time = System.currentTimeMillis();
-			ScreenLog.Insert(time, state);
+			ScreenLog.getInstance().Insert(time, state);
 		}
 	}
 }
