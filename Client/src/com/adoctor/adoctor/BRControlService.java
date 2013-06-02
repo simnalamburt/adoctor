@@ -31,7 +31,7 @@ public class BRControlService extends Service {
 	
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO : 어떤 효과가 발생하는건지?
+		// TODO 어떤 효과가 발생하는건지?
 		return null;
 	}
 }

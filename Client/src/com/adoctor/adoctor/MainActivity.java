@@ -2,14 +2,11 @@ package com.adoctor.adoctor;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
-import com.goznauk.adoctor.R;
 
 /**
  * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌 일단은 전부 보여주게 코딩함
@@ -25,10 +22,9 @@ public class MainActivity extends Activity {
 	 * 프로그램 진입점
 	 */
 	protected void onCreate(Bundle savedInstanceState) {
-		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		logview = (TextView) findViewById(R.id.logview);
 	}
 
@@ -48,10 +44,10 @@ public class MainActivity extends Activity {
 	 *            눌러진 버튼 View
 	 */
 	public void onRefreshButton(View v) {
-		DB.ScreenLog[] logs = DB.ScreenLog.SelectAll();
+		ScreenLog[] logs = ScreenLog.SelectAll();
 
 		String msg = getResources().getString(R.string.log);
-		for(DB.ScreenLog log : logs)
+		for(ScreenLog log : logs)
 			msg += log.Time + "\t\t\t" + log.State + '\n';
 		
 		logview.setText(msg);
@@ -63,16 +59,16 @@ public class MainActivity extends Activity {
 	 * @param i
 	 */
 	public void onDeleteButton(MenuItem i) {
-		DB.ScreenLog.Flush();
+		ScreenLog.Flush();
 	}
 
 	/**
 	 * 아무 문자열이나 TCP/UTF-8로 서버에 전송. 전송 버튼을 눌렀을 때 호출됨
-	 * TODO : 작업중
+	 * TODO 네트워킹 구현 완성하기
 	 * @param v
 	 */
 	public void onSendButton(View v) {
-		new NetworkTask(this).execute("안드로이드 메세지");
+		new NetworkTask().execute("안드로이드 메세지");
 	}
 
 	/**

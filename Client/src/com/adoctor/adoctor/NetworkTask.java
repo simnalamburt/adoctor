@@ -6,33 +6,22 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 /**
  * 안드로이드에서 네트워킹 사용시 호출되는 AsynchTask
- * TODO : 작업중
+ * TODO 네트워킹 구현 완성하기
  * @author Hyeon
  *
  */
 public class NetworkTask extends AsyncTask<String, Void, String> {
 
-	// TODO : 하드코딩 (서버 설정)
+	// TODO 하드코딩 (서버 설정)
 	private static String host = "uriel.upnl.org";
 	private static int port = 52301;
 	private static final int msglen = 1024;
 	private static final String encoding = "UTF-8";
-
-	private Context context;
-
-	/**
-	 * 클래스 생성자
-	 * @param context 토스트 메세지가 뜰 Context
-	 */
-	public NetworkTask(Context context) {
-		this.context = context;
-	}
 
 	/**
 	 * 배경작업 정의. 독립 스레드에서 실행됨
@@ -62,7 +51,7 @@ public class NetworkTask extends AsyncTask<String, Void, String> {
 	 */
 	@Override
 	protected void onPostExecute(String result) {
-		Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+		Toast.makeText(App.getContext(), result, Toast.LENGTH_LONG).show();
 	}
 
 }
