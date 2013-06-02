@@ -1,12 +1,19 @@
-// TODO Thread Unsafe (DB)
-
 package com.adoctor.adoctor.DB;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
+import com.adoctor.adoctor.App;
 
 /**
  * ScreenLog 테이블 싱글톤 클래스
@@ -62,14 +69,80 @@ public class ScreenLog extends Table {
 		return logs.toArray(new ScreenLogEntity[logs.size()]); 
 	}
 
+	
+	
 	/**
-	 * ScreenLog 테이블 비우기
+	 * ScreenLog 테이블의 내용을 모두 서버로 보내고, 테이블을 비움 
 	 */
 	public void Flush()
 	{
-		SQLiteDatabase db = DB.getInstance().getWritableDatabase();
-		db.delete(super.tableName, null, null);
-		db.close();
+		new ScreenLogSender().execute();
+	}
+	
+	/**
+	 * 네트워크 Task 정의 클래스
+	 * @author Hyeon
+	 */
+	private class ScreenLogSender extends AsyncTask<Void, Void, Boolean> {
+		
+		// TODO 하드코딩 수정 (네트워크 설정)
+		private static final String host = "uriel.upnl.org";
+		private static final int port = 52301;
+		private static final int msglen = 1024;
+		private static final String encoding = "UTF-8";
+		
+		private ScreenLogEntity[] logs;
+		private String reply;
+		
+		/**
+		 * DB의 내용을 받아옴. UI 스레드에서 실행됨
+		 */
+		@Override
+		protected void onPreExecute() {
+			logs = SelectAll();
+		}
+
+		/**
+		 * 네트워크 I/O 수행. 별도 스레드에서 실행됨
+		 */
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			String msg = new String();
+			for(ScreenLogEntity log : logs)
+				msg += log.Time + ':' + ( log.State == ScreenState.On ? "1," : "0," );
+			
+			try {
+				Socket socket = new Socket(host, port);
+				OutputStream writer = socket.getOutputStream();
+				InputStream reader = socket.getInputStream();
+				writer.write(msg.getBytes(encoding));
+				byte[] buffer = new byte[msglen];
+				int len = reader.read(buffer);
+				reply = new String(buffer, 0, len, encoding);
+				socket.close();
+			} catch (UnknownHostException e) {
+				reply = "△ 알 수 없는 Host Name입니다";
+			} catch (IOException e) {
+				reply = "△ 네트워크 I/O 도중 예외가 발생했습니다 ( " + e.getMessage() + " )";
+			}
+			
+			return true;
+		}
+
+		/**
+		 * 네트워크 작업이 성공적으로 끝났을 경우, 로컬DB의 내용을 삭제
+		 */
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if (result)
+			{
+				SQLiteDatabase db = DB.getInstance().getWritableDatabase();
+				db.delete(tableName, null, null);
+				db.close();
+			}
+			Toast.makeText(App.getContext(), reply, Toast.LENGTH_LONG).show();
+		}
+	
 	}
 
 	
@@ -79,7 +152,7 @@ public class ScreenLog extends Table {
 	 * Bill Pugh 싱글톤 패턴 지원용 클래스
 	 * @author Hyeon
 	 */
-	private static class SingletonHolder
+ 	private static class SingletonHolder
 	{
 		public static final ScreenLog instance = new ScreenLog();
 	}

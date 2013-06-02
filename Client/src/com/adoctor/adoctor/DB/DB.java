@@ -1,5 +1,3 @@
-// TODO Thread Unsafe (DB)
-
 package com.adoctor.adoctor.DB;
 
 

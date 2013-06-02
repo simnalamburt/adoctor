@@ -10,12 +10,11 @@ import android.widget.TextView;
 
 import com.adoctor.adoctor.DB.ScreenLog;
 import com.adoctor.adoctor.DB.ScreenLogEntity;
+import com.adoctor.adoctor.DB.ScreenState;
 
 /**
- * 화면에 보여지는 Activity로, DB의 내용을 가져와 보여줌 일단은 전부 보여주게 코딩함
- * 
+ * 최초 Activity. DB의 내용을 가져와 보여줌
  * @author Choi H.John, Sky77, Hyeon
- * 
  */
 public class MainActivity extends Activity {
 
@@ -32,9 +31,8 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * 서비스를 시작함 서비스 시작 버튼을 눌렀을 때 호출됨
-	 * 
-	 * @param v
+	 * 서비스 시작. 서비스 시작 버튼을 눌렀을 때 호출됨
+	 * @param v 사용하지 않는 입력
 	 */
 	public void onStartserviceButton(View v) {
 		startService(new Intent(this, BRControlService.class));
@@ -42,38 +40,30 @@ public class MainActivity extends Activity {
 
 	/**
 	 * DB의 내용을 가져와 TextView에 뿌려줌 새로고침 버튼을 눌렀을 때 호출됨
-	 * 
-	 * @param v
-	 *            눌러진 버튼 View
+	 * @param v 함수를 호출한 View 객체. 사용하지 않음.
 	 */
 	public void onRefreshButton(View v) {
 		ScreenLogEntity[] logs = ScreenLog.getInstance().SelectAll();
 
 		String msg = getResources().getString(R.string.log);
 		for(ScreenLogEntity log : logs)
-			msg += log.Time + "\t\t\t" + log.State + '\n';
+			msg += log.Time + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
 		
 		logview.setText(msg);
 	}
 
 	/**
-	 * scrlog 테이블의 내용을 비움 메뉴의 로그삭제 버튼을 눌렀을 때 호출됨
-	 * 
-	 * @param i
-	 */
-	public void onDeleteButton(MenuItem i) {
-		ScreenLog.getInstance().Flush();
-	}
-
-	/**
 	 * 아무 문자열이나 TCP/UTF-8로 서버에 전송. 전송 버튼을 눌렀을 때 호출됨
-	 * TODO 네트워킹 구현 완성하기
-	 * @param v
+	 * @param v 함수를 호출한 View 객체. 사용하지 않음
 	 */
 	public void onSendButton(View v) {
-		new NetworkTask().execute("새로워진 DB 구현");
+		ScreenLog.getInstance().Flush();
+		this.onRefreshButton(null);
 	}
+	
 
+	
+	// 메뉴
 	/**
 	 * 메뉴 생성
 	 */
@@ -84,15 +74,11 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * 메뉴 버튼 눌렀을 때 호출됨
+	 * 메뉴버튼을 눌렀을 때 호출되는 메서드
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.deletebtn:
-			onDeleteButton(item);
-			break;
-		}
+		if (item.getItemId() == R.id.deletebtn) onSendButton(null);
 		return super.onOptionsItemSelected(item);
 	}
 }
