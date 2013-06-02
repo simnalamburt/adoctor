@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onSendButton(View v) {
-		new NetworkTask().execute("안드로이드 메세지");
+		new NetworkTask().execute("새로워진 DB 구현");
 	}
 
 	/**
