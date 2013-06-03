@@ -7,9 +7,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -35,50 +32,18 @@ public class Main {
 	 *            -h, -host [hostname] : 호스트이름 설정. 기본값은 "uriel.upnl.org"
 	 *            -p, -port [number] : 포트번호 변경. 기본값은 52301 
 	 */
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args)
 	{
 		ParseCmd(args);
 		
-		JSONObject userdata = new JSONObject();
-		userdata.put("age", "20");
-		userdata.put("sex", "male");
-		System.out.println(userdata.toString());
-		JSONArray userarray = new JSONArray();
-		userarray.add(userdata);
-		System.out.println(userarray.toString());
-	}
-	
-	/**
-	 * 커맨드라인 입력 파싱
-	 * @param Args 커맨드라인 입력
-	 */
-	public static void ParseCmd(String[] Args)
-	{
-		Options options = new Options();
-		options.addOption("h", "host", true, "host name");
-		options.addOption("p", "port", true, "port number");
-		try
-		{
-			CommandLineParser parser = new GnuParser();
-			CommandLine cmd = parser.parse(options, Args);
-
-			if (cmd.hasOption("h")) host = cmd.getOptionValue("h");
-			if (cmd.hasOption("p")) port = Integer.parseInt(cmd.getOptionValue("p"));
-		}
-		catch (ParseException e)
-		{
-			System.out.print("△ 커맨드라인 입력 파싱 실패");
-			String msg = e.getLocalizedMessage();
-			if (msg == null) System.out.println();
-			else System.out.println(" (" + msg + ")");
-		}
-		System.out.println("○ 호스트 : " + host);
-		System.out.println("○ 포트 : " + port);
-	}
-	
-	public static void Send()
-	{
+//		JSONObject userdata = new JSONObject();
+//		userdata.put("age", "20");
+//		userdata.put("sex", "male");
+//		System.out.println(userdata.toString());
+//		JSONArray userarray = new JSONArray();
+//		userarray.add(userdata);
+//		System.out.println(userarray.toString());
+		
 		try (Socket socket = new Socket(host, port);
 			Scanner console = new Scanner(System.in))
 		{
@@ -115,5 +80,33 @@ public class Main {
 			try { System.in.read(); } catch (IOException _) { }
 		}
 	}
+	
+	/**
+	 * 커맨드라인 입력 파싱
+	 * @param Args 커맨드라인 입력
+	 */
+	public static void ParseCmd(String[] Args)
+	{
+		Options options = new Options();
+		options.addOption("h", "host", true, "host name");
+		options.addOption("p", "port", true, "port number");
+		try
+		{
+			CommandLineParser parser = new GnuParser();
+			CommandLine cmd = parser.parse(options, Args);
 
+			if (cmd.hasOption("h")) host = cmd.getOptionValue("h");
+			if (cmd.hasOption("p")) port = Integer.parseInt(cmd.getOptionValue("p"));
+		}
+		catch (ParseException e)
+		{
+			System.out.print("△ 커맨드라인 입력 파싱 실패");
+			String msg = e.getLocalizedMessage();
+			if (msg == null) System.out.println();
+			else System.out.println(" (" + msg + ")");
+		}
+		System.out.println("○ 호스트 : " + host);
+		System.out.println("○ 포트 : " + port);
+	}
+	
 }
