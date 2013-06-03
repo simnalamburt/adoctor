@@ -47,8 +47,6 @@ public class Main {
 		JSONArray userarray = new JSONArray();
 		userarray.add(userdata);
 		System.out.println(userarray.toString());
-		
-		
 	}
 	
 	/**
