@@ -1,13 +1,16 @@
 package com.adoctor.adoctor.DB;
 
+import org.msgpack.annotation.Message;
+
 /**
  * ScreenLog 테이블 엔티티 클래스
  * @author Hyeon
  */
+@Message
 public class ScreenLogEntity {
 	// Non-static Member&Methods
-	public long Time;
-	public ScreenState State;
+	public final long Time;
+	public final ScreenState State;
 	
 	/**
 	 * ScreenLog 엔티티 인스턴스 생성

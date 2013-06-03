@@ -7,14 +7,18 @@ import android.content.Intent;
  * @author Hyeon
  */
 public enum ScreenState {
-	// Enums
-	On(1, Intent.ACTION_SCREEN_ON), Off(0, Intent.ACTION_SCREEN_OFF);
-	
-	
-	
-	// Non-static members&ctor
-	private int status;
-	private String action;
+	Off {
+		@Override
+		public int toInt() { return 0; }
+		@Override
+		public String toString() { return Intent.ACTION_SCREEN_OFF; }
+	},
+	On {
+		@Override
+		public int toInt() { return 1; }
+		@Override
+		public String toString() { return Intent.ACTION_SCREEN_ON; }
+	};
 	
 	
 	
@@ -36,8 +40,8 @@ public enum ScreenState {
 	 */
 	public static ScreenState fromStringOrNull(String Action)
 	{
-		if (Action.equals(On.action)) return On;
-		else if (Action.equals(Off.action)) return Off;
+		if (Action.equals(On)) return On;
+		else if (Action.equals(Off)) return Off;
 		else return null;
 	}
 	
@@ -45,31 +49,14 @@ public enum ScreenState {
 	
 	// Non-static methods
 	/**
-	 * ScreenState 열거형 생성자. 인스턴스화가 일체 금지됨
-	 * @param Status 해당 열거형에 대응되는 정수
-	 * @param Action 해당 열거형에 대응되는 문자열(Android action)
-	 */
-	private ScreenState(int Status, String Action)
-	{
-		status = Status;
-		action = Action;
-	}
-	
-	/**
 	 * ScreenState형을 int 형으로 변환
 	 * @return ScreenState에 대응되는 정수값
 	 */
-	public int toInt()
-	{
-		return status;
-	}
+	public abstract int toInt();
 
 	/**
 	 * ScreenState에 대응되는 안드로이드 Action을 반환
 	 */
 	@Override
-	public String toString()
-	{
-		return action;
-	}
+	public abstract String toString();
 }

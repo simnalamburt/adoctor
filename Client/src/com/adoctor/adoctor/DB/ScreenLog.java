@@ -1,11 +1,11 @@
 package com.adoctor.adoctor.DB;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import org.msgpack.MessagePack;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -107,32 +107,26 @@ public class ScreenLog extends Table {
 		 */
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			// TODO 작업중
-			String msg = "[";
-			boolean isFirst = true;
-			for(ScreenLogEntity log : logs) {
-				if (isFirst) isFirst = false;
-				else msg += ',';
-				msg += String.format("{\"Time\":%d,\"State\":%d}", log.Time, log.State.toInt());
-			}
-			msg += "]";
-			
 			try {
 				Socket socket = new Socket(host, port);
-				OutputStream writer = socket.getOutputStream();
-				InputStream reader = socket.getInputStream();
-				writer.write(msg.getBytes(encoding));
+				
+				MessagePack msgpack = new MessagePack();
+				byte[] bytes = msgpack.write(logs);
+				socket.getOutputStream().write(bytes);
+				
 				byte[] buffer = new byte[msglen];
-				int len = reader.read(buffer);
+				int len = socket.getInputStream().read(buffer);
 				reply = new String(buffer, 0, len, encoding);
+				
 				socket.close();
+				return true;
 			} catch (UnknownHostException e) {
 				reply = "△ 알 수 없는 Host Name입니다";
+				return false;
 			} catch (IOException e) {
-				reply = "△ 네트워크 I/O 도중 예외가 발생했습니다 ( " + e.getMessage() + " )";
+				reply = "△ I/O 작업도중 예외가 발생했습니다 ( " + e.getMessage() + " )";
+				return false;
 			}
-			
-			return true;
 		}
 
 		/**
