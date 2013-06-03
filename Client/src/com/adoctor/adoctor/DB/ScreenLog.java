@@ -107,9 +107,15 @@ public class ScreenLog extends Table {
 		 */
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			String msg = new String();
-			for(ScreenLogEntity log : logs)
-				msg += log.Time + ':' + ( log.State == ScreenState.On ? "1," : "0," );
+			// TODO 작업중
+			String msg = "[";
+			boolean isFirst = true;
+			for(ScreenLogEntity log : logs) {
+				if (isFirst) isFirst = false;
+				else msg += ',';
+				msg += String.format("{\"Time\":%d,\"State\":%d}", log.Time, log.State.toInt());
+			}
+			msg += "]";
 			
 			try {
 				Socket socket = new Socket(host, port);

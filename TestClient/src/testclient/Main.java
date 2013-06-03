@@ -38,6 +38,8 @@ public class Main {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args)
 	{
+		ParseCmd(args);
+		
 		JSONObject userdata = new JSONObject();
 		userdata.put("age", "20");
 		userdata.put("sex", "male");
@@ -46,14 +48,22 @@ public class Main {
 		userarray.add(userdata);
 		System.out.println(userarray.toString());
 		
-		// 커맨드라인 입력 파싱
+		
+	}
+	
+	/**
+	 * 커맨드라인 입력 파싱
+	 * @param Args 커맨드라인 입력
+	 */
+	public static void ParseCmd(String[] Args)
+	{
 		Options options = new Options();
 		options.addOption("h", "host", true, "host name");
 		options.addOption("p", "port", true, "port number");
 		try
 		{
 			CommandLineParser parser = new GnuParser();
-			CommandLine cmd = parser.parse(options, args);
+			CommandLine cmd = parser.parse(options, Args);
 
 			if (cmd.hasOption("h")) host = cmd.getOptionValue("h");
 			if (cmd.hasOption("p")) port = Integer.parseInt(cmd.getOptionValue("p"));
@@ -67,8 +77,10 @@ public class Main {
 		}
 		System.out.println("○ 호스트 : " + host);
 		System.out.println("○ 포트 : " + port);
-
-		// 서버와 통신
+	}
+	
+	public static void Send()
+	{
 		try (Socket socket = new Socket(host, port);
 			Scanner console = new Scanner(System.in))
 		{
@@ -105,4 +117,5 @@ public class Main {
 			try { System.in.read(); } catch (IOException _) { }
 		}
 	}
+
 }

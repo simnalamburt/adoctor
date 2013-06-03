@@ -10,12 +10,12 @@ encoding = 'UTF-8'
 backlog = 5
 
 def respond(input):
-    ustr = unicode(input, encoding)
-    ulist = list(ustr)
-    ulist.reverse()
-    ustr = u''.join(ulist)
-    str = ustr.encode(encoding)
-    return str
+    # ustr = unicode(input, encoding)
+    # ulist = list(ustr)
+    # ulist.reverse()
+    # ustr = u''.join(ulist)
+    #str = ustr.encode(encoding)
+    return str(len(input))
 
 # 사용자 연결 핸들러 정의
 def handler(clientsock, addr):
