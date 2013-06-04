@@ -4,29 +4,28 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.adoctor.adoctor.DB.ScreenLog;
 import com.adoctor.adoctor.DB.ScreenLogEntity;
 import com.adoctor.adoctor.DB.ScreenState;
+import com.adoctor.adoctor.pref.Preference;
+import com.adoctor.adoctor.pref.PreferenceData;
 
 /**
  * 최초 Activity. DB의 내용을 가져와 보여줌
  * @author Choi H.John, Sky77, Hyeon
  */
 public class MainActivity extends Activity {
-
-	public static final String PREFS_NAME = "Pref";
 
 	/**
 	 * 프로그램 진입점
@@ -38,7 +37,6 @@ public class MainActivity extends Activity {
 		startService(new Intent(this, BRControlService.class));
 		refresh();
 	}
-
 	/**
 	 * DB의 내용을 가져와 TextView에 뿌려줌 새로고침 버튼을 눌렀을 때 호출됨
 	 * @param v 함수를 호출한 View 객체. 사용하지 않음.
@@ -58,7 +56,6 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-
 	/**
 	 * 메뉴버튼을 눌렀을 때 호출됨.
 	 * 로그삭제버튼을 눌렀을경우, DB의 내용을 서버로 전송한 후 로그가 삭제됨
@@ -109,25 +106,31 @@ public class MainActivity extends Activity {
 		final TextView age = (TextView)v2.findViewById(R.id.age);
 		final Spinner job = (Spinner)v2.findViewById(R.id.job);
 		final RadioGroup sex = (RadioGroup)v2.findViewById(R.id.sex);
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		age.setText(settings.getString("age", "0"));
-		job.setSelection(settings.getInt("job", 0));
-		if(settings.getInt("sex", -1)!=-1) ((RadioButton)v2.findViewById(settings.getInt("sex", 0))).setChecked(true);
+		
+		PreferenceData pref = Preference.getPref();
+		if (pref != null)
+		{
+			age.setText(Integer.toString(pref.age));
+			job.setSelection(pref.job);
+			sex.check(pref.sex);
+		}
+		
 		alert.setCancelable(true);
 		alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putString("age", age.getText().toString());
-				editor.putInt("job", job.getSelectedItemPosition());
-				editor.putInt("sex", sex.getCheckedRadioButtonId());
-				editor.commit();
+				if (age.getText().length() == 0) {
+					Toast.makeText(App.getContext(), "나이를 입력해주세요", Toast.LENGTH_SHORT).show();
+					inputdata();
+				} else {
+					Preference.setPref(
+						Integer.parseInt(age.getText().toString()),
+						job.getSelectedItemPosition(),
+						sex.getCheckedRadioButtonId());
+				}
 			}
 		});
 		alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			}
