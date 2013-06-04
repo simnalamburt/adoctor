@@ -1,8 +1,6 @@
 package com.adoctor.adoctor.DB;
 
-import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.msgpack.MessagePack;
@@ -89,7 +87,7 @@ public class ScreenLog extends Table {
 		private static final int port = 52301;
 		
 		private ScreenLogEntity[] logs;
-		private String reply;
+		private Exception exception;
 		
 		/**
 		 * DB의 내용을 받아옴. UI 스레드에서 실행됨
@@ -114,14 +112,8 @@ public class ScreenLog extends Table {
 					socket.close();
 				}
 				return true;
-			} catch (UnknownHostException e) {
-				reply = "알 수 없는 Host Name입니다";
-				return false;
-			} catch (IOException e) {
-				reply = "I/O 작업도중 예외가 발생했습니다 ( " + e.getLocalizedMessage() + " )";
-				return false;
 			} catch (Exception e) {
-				reply = "Unhandled Exception 발생 ( " + e.getLocalizedMessage() + " )";
+				exception = e;
 				return false;
 			}
 		}
@@ -130,14 +122,14 @@ public class ScreenLog extends Table {
 		 * 네트워크 작업이 성공적으로 끝났을 경우, 로컬DB의 내용을 삭제
 		 */
 		@Override
-		protected void onPostExecute(Boolean ioSucceeded) {
-			if (ioSucceeded)
-			{
+		protected void onPostExecute(Boolean succeeded) {
+			if (succeeded) {
 				SQLiteDatabase db = DB.getInstance().getWritableDatabase();
 				db.delete(tableName, null, null);
 				db.close();
+			} else {
+				Toast.makeText(App.getContext(), exception.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			}
-			Toast.makeText(App.getContext(), reply, Toast.LENGTH_LONG).show();
 		}
 	
 	}
