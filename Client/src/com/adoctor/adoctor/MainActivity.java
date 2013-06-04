@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +36,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		startService(new Intent(this, BRControlService.class));
-		onRefreshButton(null);
+		refresh();
 	}
 
 	/**
@@ -45,13 +44,7 @@ public class MainActivity extends Activity {
 	 * @param v 함수를 호출한 View 객체. 사용하지 않음.
 	 */
 	public void onRefreshButton(View v) {
-		ScreenLogEntity[] logs = ScreenLog.getInstance().SelectAll();
-
-		String msg = getResources().getString(R.string.log);
-		for(ScreenLogEntity log : logs)
-			msg += log.Time + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
-		
-		((TextView) findViewById(R.id.logview)).setText(msg);
+		refresh();
 	}
 
 	
@@ -72,15 +65,37 @@ public class MainActivity extends Activity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.deletebtn) {
+		switch(item.getItemId())
+		{
+		case R.id.deletebtn:
 			ScreenLog.getInstance().Flush();
-			this.onRefreshButton(null);
-		} else if (item.getItemId() == R.id.inputdata) {
+			refresh();
+			return true;
+		case R.id.inputdata:
 			inputdata();
-		}
-		return super.onOptionsItemSelected(item);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}		
 	}
 
+	
+	
+	// 기능 정의
+	/**
+	 * 로그 새로고침 메서드
+	 */
+	public void refresh()
+	{
+		ScreenLogEntity[] logs = ScreenLog.getInstance().SelectAll();
+
+		String msg = getResources().getString(R.string.log);
+		for(ScreenLogEntity log : logs)
+			msg += log.Time + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
+		
+		((TextView) findViewById(R.id.logview)).setText(msg);
+	}
+	
 	/**
 	 * 정보 입력 창 호출 메서드
 	 */
