@@ -1,38 +1,48 @@
 package com.adoctor.adoctor.DB;
 
-import org.msgpack.annotation.MessagePackOrdinalEnum;
-
 import android.content.Intent;
 
 /**
  * 스크린 상태 열거형
  * @author Hyeon
  */
-@MessagePackOrdinalEnum
 public enum ScreenState {
-	// enum 정의 순서 바꾸면 안됨!
 	Off {
 		@Override
 		public int toInt() { return 0; }
 		@Override
 		public String toString() { return Intent.ACTION_SCREEN_OFF; }
+		@Override
+		public boolean toBoolean() { return false; }
 	},
 	On {
 		@Override
 		public int toInt() { return 1; }
 		@Override
 		public String toString() { return Intent.ACTION_SCREEN_ON; }
+		@Override
+		public boolean toBoolean() { return true; }
 	};
 	
 	
 	
 	// Static methods
 	/**
+	 * 논리형을 ScreenState형으로 변환
+	 * @param Status 형변환시킬 논리형
+	 * @return 입력된 Boolean에 대응되는 ScreenState
+	 */
+	public static ScreenState fromBoolean(boolean Status)
+	{
+		return Status ? On : Off;
+	}
+	
+	/**
 	 * 정수형을 ScreenState형으로 변환
 	 * @param Status 형변환시킬 정수
 	 * @return 입력된 정수에 대응되는 ScreenState
 	 */
-	public static ScreenState fromInt(int Status)
+ 	public static ScreenState fromInt(int Status)
 	{
 		return Status != 0 ? On : Off;
 	}
@@ -52,6 +62,8 @@ public enum ScreenState {
 	
 	
 	// Non-static methods
+	public abstract boolean toBoolean();
+	
 	/**
 	 * ScreenState형을 int 형으로 변환
 	 * @return ScreenState에 대응되는 정수값

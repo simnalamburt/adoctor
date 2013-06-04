@@ -25,10 +25,6 @@ def handler(clientsock, addr):
             unpacker.feed(msg)
             data = unpacker.unpack()
             print addr, 'recv :', repr(data)
-            data = unpacker.unpack()
-            print addr, 'recv :', repr(data)
-            data = unpacker.unpack()
-            print addr, 'recv :', repr(data)
         clientsock.close()
         print addr, '- connection closed gently'
     except Exception as e:

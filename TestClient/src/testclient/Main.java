@@ -13,9 +13,9 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.msgpack.MessagePack;
-import org.msgpack.annotation.Message;
-import org.msgpack.annotation.MessagePackOrdinalEnum;
+import org.msgpack.MessagePackable;
 import org.msgpack.packer.Packer;
+import org.msgpack.unpacker.Unpacker;
 
 /**
  * 프로그램 진입점
@@ -85,10 +85,10 @@ public class Main {
 				MessagePack msgpack = new MessagePack();
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				Packer packer = msgpack.createPacker(out);
-				
+				packer.writeArrayBegin(3);
 				for(int i=0;i<3;++i) packer.write(new Entry());
+				packer.writeArrayEnd();
 				byte[] bytes = out.toByteArray();
-				
 				
 				writer.write(bytes);
 				System.out.println("전송 : " + bytes.toString());
@@ -113,11 +113,10 @@ public class Main {
 	}
 }
 
-@MessagePackOrdinalEnum
+
 enum State { Off, On }
 
-@Message
-class Entry
+class Entry implements MessagePackable
 {
 	public long time;
 	public State state;
@@ -127,5 +126,27 @@ class Entry
 	{
 		time = System.currentTimeMillis();
 		state = (lastState == State.On ? (lastState = State.Off) : (lastState = State.On));
+	}
+	
+	@Override
+	public void writeTo(Packer pk) throws IOException {
+		
+		pk.writeArrayBegin(2);
+		pk.write(time);
+		switch(state)
+		{
+		case Off: pk.write(false); break;
+		case On: pk.write(true); break;
+		default: throw new IOException("Unable to convert State into boolean.");
+		}
+		pk.writeArrayEnd();
+	}
+	@Override
+	public void readFrom(Unpacker u) throws IOException {
+		u.readMapBegin();
+		time = u.readLong();
+		if (u.readBoolean()) state = State.On;
+		else state = State.Off;
+		u.readMapEnd(true);
 	}
 }

@@ -1,13 +1,11 @@
 package com.adoctor.adoctor.DB;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.msgpack.MessagePack;
-import org.msgpack.packer.Packer;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -109,19 +107,10 @@ public class ScreenLog extends Table {
 			try {
 				Socket socket = new Socket(host, port);
 				MessagePack msgpack = new MessagePack();
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				Packer packer = msgpack.createPacker(out);
-				for(ScreenLogEntity log : logs)
-				{
-					packer.write(log);
-				}
-				
-				byte[] bytes = out.toByteArray();
-				
+				byte[] bytes = msgpack.write(logs);
 				socket.getOutputStream().write(bytes);
-				
 				socket.close();
-				return false; // TODO 수정
+				return true;
 			} catch (UnknownHostException e) {
 				reply = "알 수 없는 Host Name입니다";
 				return false;

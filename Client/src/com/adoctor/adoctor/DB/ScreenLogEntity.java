@@ -1,14 +1,18 @@
 package com.adoctor.adoctor.DB;
 
-import org.msgpack.annotation.Message;
+import java.io.IOException;
+
+import org.msgpack.MessagePackable;
+import org.msgpack.packer.Packer;
+import org.msgpack.unpacker.Unpacker;
+
 
 
 /**
  * ScreenLog 테이블 엔티티 클래스
  * @author Hyeon
  */
-@Message
-public class ScreenLogEntity {
+public class ScreenLogEntity implements MessagePackable {
 	// Non-static Member&Methods
 	public long Time;
 	public ScreenState State;
@@ -22,5 +26,17 @@ public class ScreenLogEntity {
 	{
 		this.Time = Time;
 		this.State = State;
+	}
+
+	@Override
+	public void readFrom(Unpacker arg0) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void writeTo(Packer arg0) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 }
