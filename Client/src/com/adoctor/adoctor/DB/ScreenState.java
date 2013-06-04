@@ -1,12 +1,16 @@
 package com.adoctor.adoctor.DB;
 
+import org.msgpack.annotation.MessagePackOrdinalEnum;
+
 import android.content.Intent;
 
 /**
  * 스크린 상태 열거형
  * @author Hyeon
  */
+@MessagePackOrdinalEnum
 public enum ScreenState {
+	// enum 정의 순서 바꾸면 안됨!
 	Off {
 		@Override
 		public int toInt() { return 0; }

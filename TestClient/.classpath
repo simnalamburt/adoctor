@@ -7,6 +7,11 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/TestClient/libs/commons-cli-1.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/msgpack-0.6.7.jar" sourcepath="libs/msgpack-0.6.7-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/TestClient/libs/msgpack-0.6.7-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/javassist.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

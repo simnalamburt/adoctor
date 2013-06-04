@@ -2,10 +2,11 @@
 
 from socket import *
 from thread import start_new_thread
+import msgpack
 
 host = ''
 port = 52301
-msglen = 1024
+msglen = 2048
 encoding = 'UTF-8'
 backlog = 5
 
@@ -17,12 +18,17 @@ def handler(clientsock, addr):
     print addr, '- connected!'
     try:
         while 1:
-            data = clientsock.recv(msglen)
-            if not data: break
+            msg = clientsock.recv(msglen)
+            if not msg: break
+
+            unpacker = msgpack.Unpacker()
+            unpacker.feed(msg)
+            data = unpacker.unpack()
             print addr, 'recv :', repr(data)
-            response = respond(data)
-            clientsock.send(response)
-            print addr, 'sent :', repr(response)
+            data = unpacker.unpack()
+            print addr, 'recv :', repr(data)
+            data = unpacker.unpack()
+            print addr, 'recv :', repr(data)
         clientsock.close()
         print addr, '- connection closed gently'
     except Exception as e:

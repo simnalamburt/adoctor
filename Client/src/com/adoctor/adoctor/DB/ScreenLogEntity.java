@@ -10,8 +10,8 @@ import org.msgpack.annotation.Message;
 @Message
 public class ScreenLogEntity {
 	// Non-static Member&Methods
-	public final long Time;
-	public final ScreenState State;
+	public long Time;
+	public ScreenState State;
 	
 	/**
 	 * ScreenLog 엔티티 인스턴스 생성

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import org.msgpack.MessagePack;
 import org.msgpack.packer.Packer;
-import org.msgpack.template.builder.JavassistTemplateBuilder.JavassistTemplate;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -29,7 +28,6 @@ public class ScreenLog extends Table {
 	 */
 	private ScreenLog() {
 		super("ScreenLog", new ColumnBuilder(3)
-				.add("ID", "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT")
 				.add("Time", "INTEGER NOT NULL")
 				.add("State", "INTEGER NOT NULL").get());
 	}
@@ -43,8 +41,8 @@ public class ScreenLog extends Table {
 	{
 		SQLiteDatabase db = DB.getInstance().getWritableDatabase();
 		ContentValues values = new ContentValues(2);
-		values.put(super.columns[1].Name, Time);
-		values.put(super.columns[2].Name, State.toInt());
+		values.put(super.columns[0].Name, Time);
+		values.put(super.columns[1].Name, State.toInt());
 		db.insert(super.tableName, null, values);
 		db.close();
 	}
@@ -56,7 +54,7 @@ public class ScreenLog extends Table {
 	public ScreenLogEntity[] SelectAll()
 	{
 		ArrayList<ScreenLogEntity> logs = new ArrayList<ScreenLogEntity>();
-		String columns[] = { super.columns[1].Name, super.columns[2].Name };
+		String columns[] = { super.columns[0].Name, super.columns[1].Name };
 		
 		SQLiteDatabase db = DB.getInstance().getReadableDatabase();
 		Cursor cursor = db.query(super.tableName, columns, null, null, null, null, null);
@@ -91,8 +89,6 @@ public class ScreenLog extends Table {
 		// TODO 하드코딩 수정 (네트워크 설정)
 		private static final String host = "uriel.upnl.org";
 		private static final int port = 52301;
-		private static final int msglen = 1024;
-		private static final String encoding = "UTF-8";
 		
 		private ScreenLogEntity[] logs;
 		private String reply;
@@ -113,16 +109,19 @@ public class ScreenLog extends Table {
 			try {
 				Socket socket = new Socket(host, port);
 				MessagePack msgpack = new MessagePack();
-				byte[] bytes = msgpack.write(logs);
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				Packer packer = msgpack.createPacker(out);
+				for(ScreenLogEntity log : logs)
+				{
+					packer.write(log);
+				}
+				
+				byte[] bytes = out.toByteArray();
+				
 				socket.getOutputStream().write(bytes);
 				
-				byte[] buffer = new byte[msglen];
-				int len = socket.getInputStream().read(buffer);
-				reply = new String(buffer, 0, len, encoding);
-				
 				socket.close();
-				// TODO 수정
-				return false;
+				return false; // TODO 수정
 			} catch (UnknownHostException e) {
 				reply = "알 수 없는 Host Name입니다";
 				return false;
@@ -139,8 +138,8 @@ public class ScreenLog extends Table {
 		 * 네트워크 작업이 성공적으로 끝났을 경우, 로컬DB의 내용을 삭제
 		 */
 		@Override
-		protected void onPostExecute(Boolean result) {
-			if (result)
+		protected void onPostExecute(Boolean ioSucceeded) {
+			if (ioSucceeded)
 			{
 				SQLiteDatabase db = DB.getInstance().getWritableDatabase();
 				db.delete(tableName, null, null);
