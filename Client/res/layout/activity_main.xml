@@ -7,13 +7,6 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/startservicebtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onStartserviceButton"
-        android:text="@string/startservice" />
-
-    <Button
         android:id="@+id/refreshbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,12 +19,5 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="@string/log" />
-    
-    <Button
-        android:id="@+id/sendbtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onSendButton"
-        android:text="@string/send" />
 
 </LinearLayout>

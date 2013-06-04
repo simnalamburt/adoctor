@@ -10,11 +10,6 @@ encoding = 'UTF-8'
 backlog = 5
 
 def respond(input):
-    # ustr = unicode(input, encoding)
-    # ulist = list(ustr)
-    # ulist.reverse()
-    # ustr = u''.join(ulist)
-    #str = ustr.encode(encoding)
     return str(len(input))
 
 # 사용자 연결 핸들러 정의
@@ -24,10 +19,10 @@ def handler(clientsock, addr):
         while 1:
             data = clientsock.recv(msglen)
             if not data: break
-            print addr, 'recv :', unicode(data, encoding)
+            print addr, 'recv :', repr(data)
             response = respond(data)
             clientsock.send(response)
-            print addr, 'sent :', unicode(response, encoding)
+            print addr, 'sent :', repr(response)
         clientsock.close()
         print addr, '- connection closed gently'
     except Exception as e:

@@ -18,8 +18,6 @@ import com.adoctor.adoctor.DB.ScreenState;
  */
 public class MainActivity extends Activity {
 
-	TextView logview;
-
 	/**
 	 * 프로그램 진입점
 	 */
@@ -27,15 +25,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		logview = (TextView) findViewById(R.id.logview);
-	}
-
-	/**
-	 * 서비스 시작. 서비스 시작 버튼을 눌렀을 때 호출됨
-	 * @param v 사용하지 않는 입력
-	 */
-	public void onStartserviceButton(View v) {
 		startService(new Intent(this, BRControlService.class));
+		onRefreshButton(null);
 	}
 
 	/**
@@ -49,18 +40,8 @@ public class MainActivity extends Activity {
 		for(ScreenLogEntity log : logs)
 			msg += log.Time + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
 		
-		logview.setText(msg);
+		((TextView) findViewById(R.id.logview)).setText(msg);
 	}
-
-	/**
-	 * 아무 문자열이나 TCP/UTF-8로 서버에 전송. 전송 버튼을 눌렀을 때 호출됨
-	 * @param v 함수를 호출한 View 객체. 사용하지 않음
-	 */
-	public void onSendButton(View v) {
-		ScreenLog.getInstance().Flush();
-		this.onRefreshButton(null);
-	}
-	
 
 	
 	// 메뉴
@@ -74,11 +55,16 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * 메뉴버튼을 눌렀을 때 호출되는 메서드
+	 * 메뉴버튼을 눌렀을 때 호출됨.
+	 * 로그삭제버튼을 눌렀을경우, DB의 내용을 서버로 전송한 후 로그가 삭제됨
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.deletebtn) onSendButton(null);
+		if (item.getItemId() == R.id.deletebtn)
+		{
+			ScreenLog.getInstance().Flush();
+			this.onRefreshButton(null);
+		}
 		return super.onOptionsItemSelected(item);
 	}
 }

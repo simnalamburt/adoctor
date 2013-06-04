@@ -2,6 +2,7 @@ package com.adoctor.adoctor.DB;
 
 import org.msgpack.annotation.Message;
 
+
 /**
  * ScreenLog 테이블 엔티티 클래스
  * @author Hyeon

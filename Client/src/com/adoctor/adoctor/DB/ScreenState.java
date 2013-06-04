@@ -40,8 +40,8 @@ public enum ScreenState {
 	 */
 	public static ScreenState fromStringOrNull(String Action)
 	{
-		if (Action.equals(On)) return On;
-		else if (Action.equals(Off)) return Off;
+		if (Action.equals(On.toString())) return On;
+		else if (Action.equals(Off.toString())) return Off;
 		else return null;
 	}
 	

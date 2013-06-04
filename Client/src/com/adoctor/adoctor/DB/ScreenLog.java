@@ -1,11 +1,14 @@
 package com.adoctor.adoctor.DB;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.msgpack.MessagePack;
+import org.msgpack.packer.Packer;
+import org.msgpack.template.builder.JavassistTemplateBuilder.JavassistTemplate;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -109,7 +112,6 @@ public class ScreenLog extends Table {
 		protected Boolean doInBackground(Void... params) {
 			try {
 				Socket socket = new Socket(host, port);
-				
 				MessagePack msgpack = new MessagePack();
 				byte[] bytes = msgpack.write(logs);
 				socket.getOutputStream().write(bytes);
@@ -119,12 +121,16 @@ public class ScreenLog extends Table {
 				reply = new String(buffer, 0, len, encoding);
 				
 				socket.close();
-				return true;
+				// TODO 수정
+				return false;
 			} catch (UnknownHostException e) {
-				reply = "△ 알 수 없는 Host Name입니다";
+				reply = "알 수 없는 Host Name입니다";
 				return false;
 			} catch (IOException e) {
-				reply = "△ I/O 작업도중 예외가 발생했습니다 ( " + e.getMessage() + " )";
+				reply = "I/O 작업도중 예외가 발생했습니다 ( " + e.getLocalizedMessage() + " )";
+				return false;
+			} catch (Exception e) {
+				reply = "Unhandled Exception 발생 ( " + e.getLocalizedMessage() + " )";
 				return false;
 			}
 		}
