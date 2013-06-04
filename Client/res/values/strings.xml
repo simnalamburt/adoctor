@@ -4,4 +4,11 @@
     <string name="refresh">로그 새로고침</string>
     <string name="log">● Screen State Log \n</string>
     <string name="delete">로그 비우기/서버로 보내기</string>
+    <string name="inputdata">정보입력</string>
+    <string name="age">나이</string>
+    <string name="job">직업</string>
+    <string name="jobprompt">직업 선택</string>
+    <string name="sex">성별</string>
+    <string name="sex_male">남</string>
+    <string name="sex_female">여</string>
 </resources>

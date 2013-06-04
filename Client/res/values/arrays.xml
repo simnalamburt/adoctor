@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="jobs">
+        <item>무직</item>
+        <item>초등학생</item>
+        <item>중학생</item>
+        <item>고등학생</item>
+        <item>대학생</item>
+        <item>주부</item>
+        <item>직장인</item>
+        <item>자영업</item>
+        <item>기타</item>
+    </string-array>
+</resources>
