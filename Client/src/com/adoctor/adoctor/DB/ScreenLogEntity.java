@@ -28,15 +28,25 @@ public class ScreenLogEntity implements MessagePackable {
 		this.State = State;
 	}
 
+	/**
+	 * ScreenLogEntity 시리얼라이저
+	 */
 	@Override
-	public void readFrom(Unpacker arg0) throws IOException {
-		// TODO Auto-generated method stub
-		
+	public void writeTo(Packer pk) throws IOException {
+		pk.writeArrayBegin(2);
+		pk.write(Time);
+		pk.write(State.toBoolean());
+		pk.writeArrayEnd();
 	}
-
+	
+	/**
+	 * ScreenLogEntity 디시리얼라이저
+	 */
 	@Override
-	public void writeTo(Packer arg0) throws IOException {
-		// TODO Auto-generated method stub
-		
+	public void readFrom(Unpacker u) throws IOException {
+		u.readArrayBegin();
+		Time = u.readLong();
+		State = ScreenState.fromBoolean(u.readBoolean());
+		u.readArrayEnd(true);
 	}
 }

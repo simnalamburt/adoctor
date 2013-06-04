@@ -62,6 +62,10 @@ public enum ScreenState {
 	
 	
 	// Non-static methods
+	/**
+	 * ScreenState형을 boolean 형으로 변환
+	 * @return ScreenState에 대응되는 논리형
+	 */
 	public abstract boolean toBoolean();
 	
 	/**

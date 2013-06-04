@@ -139,7 +139,7 @@ class Entry implements MessagePackable
 		case On: pk.write(true); break;
 		default: throw new IOException("Unable to convert State into boolean.");
 		}
-		pk.writeArrayEnd();
+		pk.writeArrayEnd(true);
 	}
 	@Override
 	public void readFrom(Unpacker u) throws IOException {

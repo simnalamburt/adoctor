@@ -106,10 +106,13 @@ public class ScreenLog extends Table {
 		protected Boolean doInBackground(Void... params) {
 			try {
 				Socket socket = new Socket(host, port);
-				MessagePack msgpack = new MessagePack();
-				byte[] bytes = msgpack.write(logs);
-				socket.getOutputStream().write(bytes);
-				socket.close();
+				try {
+					MessagePack msgpack = new MessagePack();
+					byte[] bytes = msgpack.write(logs);
+					socket.getOutputStream().write(bytes);
+				} finally {
+					socket.close();
+				}
 				return true;
 			} catch (UnknownHostException e) {
 				reply = "알 수 없는 Host Name입니다";
