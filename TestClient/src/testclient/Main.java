@@ -1,6 +1,5 @@
 package testclient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -14,6 +13,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.msgpack.MessagePack;
 import org.msgpack.MessagePackable;
+import org.msgpack.packer.BufferPacker;
 import org.msgpack.packer.Packer;
 import org.msgpack.unpacker.Unpacker;
 
@@ -83,13 +83,27 @@ public class Main {
 			do
 			{
 				MessagePack msgpack = new MessagePack();
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				Packer packer = msgpack.createPacker(out);
-				packer.writeArrayBegin(3);
-				for(int i=0;i<3;++i) packer.write(new Entry());
-				packer.writeArrayEnd();
-				byte[] bytes = out.toByteArray();
+				BufferPacker packer = msgpack.createBufferPacker();
 				
+				packer.writeMapBegin(2);
+				{
+					packer.write("version");
+					packer.write(0);
+					
+					packer.write("data");
+					packer.writeMapBegin(2);
+					{
+						packer.write("pref");
+						packer.write(pref);
+						
+						packer.write("logs");
+						packer.write(logs);
+					}
+					packer.writeMapEnd();
+				}
+				packer.writeMapEnd();
+				
+				byte[] bytes = packer.toByteArray();
 				writer.write(bytes);
 				System.out.println("전송 : " + bytes.toString());
 			} while (!console.nextLine().equals(escape));
