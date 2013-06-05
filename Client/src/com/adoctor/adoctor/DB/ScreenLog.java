@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import org.msgpack.MessagePack;
+import org.msgpack.packer.BufferPacker;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -12,6 +13,8 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.adoctor.adoctor.App;
+import com.adoctor.adoctor.pref.Preference;
+import com.adoctor.adoctor.pref.PreferenceData;
 
 /**
  * ScreenLog 테이블 싱글톤 클래스
@@ -66,8 +69,6 @@ public class ScreenLog extends Table {
 		return logs.toArray(new ScreenLogEntity[logs.size()]); 
 	}
 
-	
-	
 	/**
 	 * ScreenLog 테이블의 내용을 모두 서버로 보내고, 테이블을 비움 
 	 */
@@ -76,16 +77,13 @@ public class ScreenLog extends Table {
 		new ScreenLogSender().execute();
 	}
 	
-	/**
-	 * 네트워크 Task 정의 클래스
-	 * @author Hyeon
-	 */
 	private class ScreenLogSender extends AsyncTask<Void, Void, Boolean> {
 		
 		// TODO 하드코딩 수정 (네트워크 설정)
 		private static final String host = "uriel.upnl.org";
 		private static final int port = 52301;
 		
+		private PreferenceData pref;
 		private ScreenLogEntity[] logs;
 		private Exception exception;
 		
@@ -94,7 +92,8 @@ public class ScreenLog extends Table {
 		 */
 		@Override
 		protected void onPreExecute() {
-			logs = SelectAll();
+			pref = Preference.getPref();
+			logs = ScreenLog.getInstance().SelectAll();
 		}
 
 		/**
@@ -106,7 +105,27 @@ public class ScreenLog extends Table {
 				Socket socket = new Socket(host, port);
 				try {
 					MessagePack msgpack = new MessagePack();
-					byte[] bytes = msgpack.write(logs);
+					BufferPacker packer = msgpack.createBufferPacker();
+					
+					packer.writeMapBegin(2);
+					{
+						packer.write("version");
+						packer.write(0);
+						
+						packer.write("data");
+						packer.writeMapBegin(2);
+						{
+							packer.write("pref");
+							packer.write(pref);
+							
+							packer.write("logs");
+							packer.write(logs);
+						}
+						packer.writeMapEnd();
+					}
+					packer.writeMapEnd();
+					
+					byte[] bytes = packer.toByteArray();
 					socket.getOutputStream().write(bytes);
 				} finally {
 					socket.close();
@@ -131,10 +150,9 @@ public class ScreenLog extends Table {
 				Toast.makeText(App.getContext(), exception.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			}
 		}
-	
 	}
-
 	
+		
 	
 	// Static subclass&method to support singleton pattern
 	/**

@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
 	 * @param Job 직업
 	 * @param Sex 성별
 	 */
-	private void inputdata(final Integer Age, final int Job, final int Sex)
+	private void inputdata(Integer Age, int Job, int Sex)
 	{
 		// 레이아웃 로드
 		LayoutInflater inf = getLayoutInflater();
@@ -126,7 +126,8 @@ public class MainActivity extends Activity {
 			// 기존 설정이 있는경우
 			age.setText(Integer.toString(pref.age));
 			job.setSelection(pref.job);
-			sex.check(pref.sex);
+			if (pref.sex == 0) sex.check(R.id.sex_male);
+			else if (pref.sex == 1) sex.check(R.id.sex_female);
 			
 			alert.setNegativeButton("취소", new DialogInterface.OnClickListener()
 			{
@@ -134,9 +135,10 @@ public class MainActivity extends Activity {
 			});
 		} else {
 			// 기존 설정이 없는경우
-			if (Age != null) age.setText(Integer.toString(Age));
+			if (Age != null) age.setText(Age.toString());
 			job.setSelection(Job);
-			sex.check(Sex);
+			if (Sex == 0) sex.check(R.id.sex_male);
+			else if (Sex == 1) sex.check(R.id.sex_female);
 			
 			alert.setCancelable(false);
 		}
@@ -147,10 +149,11 @@ public class MainActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which)
 			{
 				String textAge = age.getText().toString();
+				int radioid = sex.getCheckedRadioButtonId();
 				
 				Integer inputAge = textAge.equals("") ? null : Integer.parseInt(textAge);
 				int inputJob = job.getSelectedItemPosition();
-				int inputSex = sex.getCheckedRadioButtonId();
+				int inputSex = radioid == -1 ? -1 : ( radioid == R.id.sex_male ? 0 : 1 );
 				
 				if (inputAge == null) {
 					Toast.makeText(App.getContext(), "나이를 입력해주세요 :)", Toast.LENGTH_SHORT).show();

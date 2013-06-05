@@ -28,6 +28,7 @@ public class ScreenLogEntity implements MessagePackable {
 		this.State = State;
 	}
 
+	// MessagePack
 	/**
 	 * ScreenLogEntity 시리얼라이저
 	 */
@@ -38,7 +39,6 @@ public class ScreenLogEntity implements MessagePackable {
 		pk.write(State.toBoolean());
 		pk.writeArrayEnd();
 	}
-	
 	/**
 	 * ScreenLogEntity 디시리얼라이저
 	 */
