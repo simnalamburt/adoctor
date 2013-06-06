@@ -26,7 +26,7 @@ public class BRControlService extends Service {
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
 		registerReceiver(mScreenStateReceiver, filter);
 
-		return START_STICKY;
+		return START_REDELIVER_INTENT;
 	}
 	
 	@Override
