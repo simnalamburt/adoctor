@@ -119,13 +119,13 @@ public class ScreenLog extends Table {
 							packer.writeMapBegin(3);
 							{
 								packer.write("age");
-								packer.write(age);
+								packer.write(pref.age);
 								
 								packer.write("job");
-								packer.write(job);
+								packer.write(pref.job);
 								
 								packer.write("sex");
-								packer.write(sex);
+								packer.write(pref.sex);
 							}
 							packer.writeMapEnd();
 							
