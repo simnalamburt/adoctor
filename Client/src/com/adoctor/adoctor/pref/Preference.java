@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 /**
  * 어플리케이션 Preference 래퍼 클래스
- * @author Sky77, Hyeon
+ * @author Sky77, Hyeon, H.John
  */
 public class Preference {
 
@@ -31,23 +31,26 @@ public class Preference {
 			return new PreferenceData(
 				settings.getInt("age", 0),
 				settings.getInt("job", 0),
-				settings.getInt("sex", 0));
+				settings.getInt("sex", 0),
+				settings.getLong("dstime", 6*3600*1000));
 		else return null;
 	}
 	
 	/**
 	 * 어플리케이션 설정을 수정
-	 * @param Age 나이
+	 *@param Age 나이
 	 * @param Job 직업
 	 * @param Sex 성별
+	 * @param DSTime 하루 시작 시간
 	 */
-	public static void setPref(int Age, int Job, int Sex) {
+	public static void setPref(int Age, int Job, int Sex, long DSTime) {
 		SharedPreferences settings = App.getContext().getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("hasPref", true);
 		editor.putInt("age", Age);
 		editor.putInt("job", Job);
 		editor.putInt("sex", Sex);
+		editor.putLong("dstime", DSTime);
 		editor.commit();
 	}
 }

@@ -14,16 +14,17 @@ import org.msgpack.unpacker.Unpacker;
 
 /**
  * 어플리케이션 Preference 정보 클래스
- * @author Hyeon
+ * @author Hyeon, H.John
  */
 public class PreferenceData implements MessagePackable {
 	public int age;
 	public int job;
 	public int sex;
+	public long dstime;
 	
-	public PreferenceData(int Age, int Job, int Sex)
+	public PreferenceData(int Age, int Job, int Sex, long DSTime)
 	{
-		age = Age; job = Job; sex = Sex;
+		age = Age; job = Job; sex = Sex; dstime = DSTime;
 	}
 
 	// MessagePack
@@ -41,6 +42,9 @@ public class PreferenceData implements MessagePackable {
 		
 		packer.write("sex");
 		packer.write(sex);
+		
+		packer.write("DSTime");
+		packer.write(dstime);
 		packer.writeMapEnd();
 	}
 	/**
@@ -54,5 +58,6 @@ public class PreferenceData implements MessagePackable {
 		age = map.get("age");
 		job = map.get("job");
 		sex = map.get("sex");
+		dstime = map.get("dstime");
 	}
 }

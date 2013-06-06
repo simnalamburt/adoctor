@@ -1,10 +1,15 @@
 package com.adoctor.adoctor;
 
+import java.util.Calendar;
+
+import android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
 import com.adoctor.adoctor.DB.ScreenLog;
@@ -25,8 +32,13 @@ import com.adoctor.adoctor.pref.PreferenceData;
  * 최초 Activity. DB의 내용을 가져와 보여줌
  * @author Choi H.John, Sky77, Hyeon
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnTimeChangedListener {
 
+	
+	Clock01 mClock01;
+	Handler mHandler;
+	
+	
 	/**
 	 * 프로그램 진입점
 	 */
@@ -34,6 +46,17 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		mClock01 = (Clock01) findViewById(R.id.clock01);
+		mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                   int Pos;
+                   Pos = mClock01.getPos();
+                   if(Pos<1440)
+                   mClock01.setPos(Pos+1);
+                   mHandler.sendEmptyMessageDelayed(0,60000);//1분마다 쓰레드 불러줌
+            	}
+			};
+     
 		startService(new Intent(this, BRControlService.class));
 		refresh();
 		
@@ -99,7 +122,7 @@ public class MainActivity extends Activity {
 	 * 정보 입력 창 호출 메서드
 	 * 어플리케이션 Preference가 없었을 경우(주로 최초실행시), Preference 입력이 강제된다
 	 */
-	private void inputdata() { inputdata(null, 0, -1); }
+	private void inputdata() { inputdata(null, 0, -1, 6*3600*1000); }
 	
 	/**
 	 * 정보 입력 창 호출 메서드
@@ -107,8 +130,9 @@ public class MainActivity extends Activity {
 	 * @param Age 나이 (nullable)
 	 * @param Job 직업
 	 * @param Sex 성별
+	 * @param DSTime 하루 시작 시간
 	 */
-	private void inputdata(Integer Age, int Job, int Sex)
+	private void inputdata(Integer Age, int Job, int Sex, long DSTime)
 	{
 		// 레이아웃 로드
 		LayoutInflater inf = getLayoutInflater();
@@ -119,6 +143,11 @@ public class MainActivity extends Activity {
 		final TextView age = (TextView)v2.findViewById(R.id.age);
 		final Spinner job = (Spinner)v2.findViewById(R.id.job);
 		final RadioGroup sex = (RadioGroup)v2.findViewById(R.id.sex);
+		
+		final TimePicker daystart = (TimePicker)v2.findViewById(R.id.dayStartPicker);
+		daystart.setOnTimeChangedListener(this);
+			    		
+		
 		
 		// 설정 읽어옴
 		PreferenceData pref = Preference.getPref();
@@ -155,6 +184,8 @@ public class MainActivity extends Activity {
 				int inputJob = job.getSelectedItemPosition();
 				int inputSex = radioid == -1 ? -1 : ( radioid == R.id.sex_male ? 0 : 1 );
 				
+				
+				
 				if (inputAge == null) {
 					Toast.makeText(App.getContext(), "나이를 입력해주세요 :)", Toast.LENGTH_SHORT).show();
 					inputdata(inputAge, inputJob, inputSex);
@@ -166,12 +197,22 @@ public class MainActivity extends Activity {
 					inputdata(inputAge, inputJob, inputSex);
 					return;
 				}
-				
-				Preference.setPref(inputAge, inputJob, inputSex);
+			
+				Preference.setPref(inputAge, inputJob, inputSex, input);
 			}
 		});
 		
 		alert.show();
 	}
+	
+	@Override
+	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+		Calendar DSTimeCal = Calendar.getInstance();
+
+	    DSTimeCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+	    DSTimeCal.set(Calendar.MINUTE, minute);
+	    DSTimeCal.set(Calendar.SECOND, 0);
+
+	  }	
 	
 }
