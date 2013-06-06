@@ -146,7 +146,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		
 		final TimePicker daystart = (TimePicker)v2.findViewById(R.id.dayStartPicker);
 		daystart.setOnTimeChangedListener(this);
-			    		
+		DSTimeCal	    		
 		
 		
 		// 설정 읽어옴
@@ -155,6 +155,8 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			// 기존 설정이 있는경우
 			age.setText(Integer.toString(pref.age));
 			job.setSelection(pref.job);
+			daystart.setCurrentHour((int)Math.floor((double)pref.dstime/36000000)/1000);
+			daystart.setCurrentMinute((int)Math.floor(((double)pref.dstime%36000000)/1000));
 			if (pref.sex == 0) sex.check(R.id.sex_male);
 			else if (pref.sex == 1) sex.check(R.id.sex_female);
 			
@@ -166,6 +168,10 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			// 기존 설정이 없는경우
 			if (Age != null) age.setText(Age.toString());
 			job.setSelection(Job);
+			daystart.setCurrentHour((int)Math.floor((double)DSTime/36000000)/1000);
+			daystart.setCurrentMinute((int)Math.floor(((double)DSTime%36000000)/1000));
+			
+			
 			if (Sex == 0) sex.check(R.id.sex_male);
 			else if (Sex == 1) sex.check(R.id.sex_female);
 			
