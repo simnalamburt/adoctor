@@ -92,6 +92,32 @@ public class MainActivity extends Activity {
 		for(ScreenLogEntity log : logs)
 			msg += log.Time + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
 		
+		boolean swch = false;
+		long total_time = 0;
+		long on_time = 0;
+		for(ScreenLogEntity log : logs)
+		{
+			if(swch)
+			{
+				if(log.State==ScreenState.On) on_time=log.Time;
+				else
+				{
+					total_time+=log.Time-on_time;
+					swch=false;
+				}
+			}
+			else
+			{
+				if(log.State==ScreenState.On)
+				{
+					swch=true;
+					on_time=log.Time;
+				}
+			}
+		}
+		
+		msg += "켜져있던 총 시간 : "+( total_time/3600000 !=0 ? total_time/3600000+"시간 ":"" )+( total_time/60000 !=0 ? (total_time%3600000)/60000+"분 ":"" )+(total_time%60000)/1000+"초\n";
+		
 		((TextView) findViewById(R.id.logview)).setText(msg);
 	}
 	
