@@ -34,4 +34,10 @@ public class BRControlService extends Service {
 		// TODO 어떤 효과가 발생하는건지?
 		return null;
 	}
+
+	@Override
+	public void onDestroy() {
+		unregisterReceiver(mScreenStateReceiver);
+		super.onDestroy();
+	}
 }
