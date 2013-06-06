@@ -5,6 +5,7 @@
     android:versionName="1.0" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -33,7 +34,13 @@
             android:stopWithTask="false" >
         </service>
 
-        <receiver android:name="ScreenStateReceiver" >
+        <receiver
+            android:name="ScreenStateReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
     </application>
 
