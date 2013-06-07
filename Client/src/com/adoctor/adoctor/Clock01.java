@@ -115,7 +115,7 @@ class Clock01 extends View {
     	   {
     		   Paint fillpnt = new Paint();
                fillpnt.setColor(Color.BLACK);
-    		   canvas.drawText("설정이 없습니다.", 0, 0, fillpnt);
+    		   canvas.drawText("설정이 없습니다.", 10, 10, fillpnt);
     	   }
        }
  

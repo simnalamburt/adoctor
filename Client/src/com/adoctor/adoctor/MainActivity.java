@@ -240,6 +240,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 				}
 
 				Preference.setPref(inputAge, inputJob, inputSex, dstime);
+				refresh();
 			}
 		});
 
