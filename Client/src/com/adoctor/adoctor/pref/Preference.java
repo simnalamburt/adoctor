@@ -1,8 +1,8 @@
 package com.adoctor.adoctor.pref;
 
-import com.adoctor.adoctor.App;
-
 import android.content.SharedPreferences;
+
+import com.adoctor.adoctor.App;
 
 /**
  * 어플리케이션 Preference 래퍼 클래스
@@ -31,8 +31,7 @@ public class Preference {
 			return new PreferenceData(
 				settings.getInt("age", 0),
 				settings.getInt("job", 0),
-				settings.getInt("sex", 0),
-				settings.getLong("dstime", 6*3600*1000));
+				settings.getInt("sex", 0));
 		else return null;
 	}
 
@@ -41,16 +40,14 @@ public class Preference {
 	 *@param Age 나이
 	 * @param Job 직업
 	 * @param Sex 성별
-	 * @param DSTime 하루 시작 시간
 	 */
-	public static void setPref(int Age, int Job, int Sex, long DSTime) {
+	public static void setPref(int Age, int Job, int Sex) {
 		SharedPreferences settings = App.getContext().getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("hasPref", true);
 		editor.putInt("age", Age);
 		editor.putInt("job", Job);
 		editor.putInt("sex", Sex);
-		editor.putLong("dstime", DSTime);
 		editor.commit();
 	}
 }
