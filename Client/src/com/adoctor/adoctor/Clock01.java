@@ -1,10 +1,5 @@
 package com.adoctor.adoctor;
 
-import java.util.Calendar;
-
-import com.adoctor.adoctor.pref.Preference;
-import com.adoctor.adoctor.pref.PreferenceData;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +7,9 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.adoctor.adoctor.pref.Preference;
+import com.adoctor.adoctor.pref.PreferenceData;
 
 
 /**
@@ -22,8 +20,9 @@ import android.view.View;
 */
 
 class Clock01 extends View {
-       int mMax;
-       int mPos;
+       //int mMax;
+       //int mPos;
+       long TimeSum;
        
  
        public Clock01(Context context, AttributeSet attrs, int defStyle) {
@@ -44,12 +43,14 @@ class Clock01 extends View {
        
        void init() {
              //최대 크기
-             mMax = 1440; //하루 = 1440분
+    //         mMax = 1440; //하루 = 1440분
              //현재 위치
-             mPos = 0;
+      //       mPos = 0;
+             
+             TimeSum = 0;
        }
  
- 
+/* 
        //최대값 반환
        int getMax() { return 1440; }
  
@@ -63,15 +64,20 @@ class Clock01 extends View {
        }
  
        int getPos() { return mPos; }
+  */     
+       void setTimeSum(long timeSum) {
+    	   TimeSum = timeSum;
+    	   invalidate();
+       }
  
        protected void onDraw(Canvas canvas) {
              
              //원을 만듦
              RectF rt = new RectF();
-             rt.left = getPaddingLeft() + 20;//왼쪽값
-             rt.right = getWidth() - getPaddingRight() - 20;//오른쪽값
-             rt.bottom = getHeight() - getPaddingTop() + 20;//아래쪽값
-             rt.top = getPaddingTop() - 20;
+             rt.left = getPaddingLeft();//왼쪽값
+             rt.right = getWidth() - getPaddingRight();//오른쪽값
+             rt.bottom = getHeight() - getPaddingTop();//아래쪽값
+             rt.top = getPaddingTop();
              
  
              Paint fillpnt = new Paint();
@@ -90,7 +96,7 @@ class Clock01 extends View {
              PreferenceData pref = Preference.getPref();
              
              float startAngle = 360 * pref.dstime / (24*3600*1000); //시작 각도 float startAngle = dayStartingTime;
-             float sweepAngle = 360 * mPos / mMax;//부채꼴의 각도는 계속 변함 float sweepAngle = 360 * (현재누적시간 + mPos) / mMax;
+             float sweepAngle = 360 * TimeSum / (24*3600*1000);//부채꼴의 각도는 계속 변함 float sweepAngle = 360 * (현재누적시간 + mPos) / mMax;
       
              canvas.drawArc(rt, startAngle, sweepAngle, true, fillpnt);
              

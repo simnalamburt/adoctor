@@ -2,7 +2,6 @@ package com.adoctor.adoctor;
 
 import java.util.Calendar;
 
-import android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -50,13 +49,14 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		mClock01 = (Clock01) findViewById(R.id.clock01);
 		mHandler = new Handler() {
             public void handleMessage(Message msg) {
-                   int Pos;
-                   Pos = mClock01.getPos();
-                   if(Pos<1440)
-                   mClock01.setPos(Pos+1);
-                   mHandler.sendEmptyMessageDelayed(0,60000);//1분마다 쓰레드 불러줌
-            	}
-			};
+            	mClock01.setTimeSum(refresh());
+              /*int Pos;
+                Pos = mClock01.getPos();
+                if(Pos<1440)
+                mClock01.setPos(Pos+1);
+                mHandler.sendEmptyMessageDelayed(0,60000);//1분마다 쓰레드 불러줌*/
+            }
+		};
      
 		startService(new Intent(this, BRControlService.class));
 		refresh();
@@ -108,15 +108,41 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	/**
 	 * 로그 새로고침 메서드
 	 */
-	private void refresh()
+	private long refresh()
 	{
 		ScreenLogEntity[] logs = ScreenLog.getInstance().SelectAll();
 
 		String msg = getResources().getString(R.string.log);
+
 		for(ScreenLogEntity log : logs)
 			msg += log.Time + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
+		     
+		boolean swch = false;
+		long total_time = 0;
+		long on_time = 0;
+		for(ScreenLogEntity log : logs) {
+		  	if(swch) {
+		   		if(log.State==ScreenState.On) on_time=log.Time;
+		   		else {
+		   			total_time+=log.Time-on_time;
+		   			swch=false;
+		   		}
+		   	}
+		   	
+		   	else {
+		   		if(log.State==ScreenState.On) {
+		   			swch=true;
+		   			on_time=log.Time;
+		   		}
+		   	}	
+		}
 		
-		((TextView) findViewById(R.id.logview)).setText(msg);
+		msg += "켜져있던 총 시간 : "+ (total_time/3600000 !=0 ? total_time/3600000+"시간 ":"" )+( total_time/60000 !=0 ? (total_time%3600000)/60000+"분 ":"" )+(total_time%60000)/1000+"초\n";
+		   
+		((TextView)findViewById(R.id.logview)).setText(msg);
+		mClock01.setTimeSum(total_time);
+		
+		return total_time;
 	}
 	
 	/**
@@ -145,7 +171,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		final Spinner job = (Spinner)v2.findViewById(R.id.job);
 		final RadioGroup sex = (RadioGroup)v2.findViewById(R.id.sex);
 		
-		final TimePicker daystart = (TimePicker)v2.findViewById(R.id.dayStartPicker);
+		final TimePicker daystart = (TimePicker)v2.findViewById(R.id.dstimepicker);
 		
 		daystart.setOnTimeChangedListener(this);
 		final long dstime = DSTimeCal.getTimeInMillis();
@@ -179,7 +205,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			cal2.setTimeInMillis(DSTime);
 			daystart.setCurrentHour(cal2.get(Calendar.HOUR_OF_DAY));
 					//(int)Math.floor((double)DSTime/36000000)/1000);
-			daystart.setCurrentMinute(cal2.get(Calendar.MINUTE);
+			daystart.setCurrentMinute(cal2.get(Calendar.MINUTE));
 					//(int)Math.floor(((double)DSTime%36000000)/1000));
 			
 			if (Sex == 0) sex.check(R.id.sex_male);

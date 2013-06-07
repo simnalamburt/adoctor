@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SplashTheme" parent="android:Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/intro_480x800_9patch</item>
+    </style>
+</resources>
+
