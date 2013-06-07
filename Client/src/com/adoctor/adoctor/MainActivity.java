@@ -50,11 +50,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		mHandler = new Handler() {
 			public void handleMessage(Message msg) {
 				mClock01.setTimeSum(refresh());
-				/*int Pos;
-                Pos = mClock01.getPos();
-                if(Pos<1440)
-                mClock01.setPos(Pos+1);
-                mHandler.sendEmptyMessageDelayed(0,60000);//1분마다 쓰레드 불러줌*/
 			}
 		};
 		DSTimeCal = Calendar.getInstance();
@@ -188,9 +183,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			Calendar cal1 = Calendar.getInstance();
 			cal1.setTimeInMillis(pref.dstime);
 			daystart.setCurrentHour(cal1.get(Calendar.HOUR_OF_DAY));
-			//(int)Math.floor((double)pref.dstime/36000000)/1000);
 			daystart.setCurrentMinute(cal1.get(Calendar.MINUTE));
-			//(int)Math.floor(((double)pref.dstime%36000000)/1000));
 			if (pref.sex == 0) sex.check(R.id.sex_male);
 			else if (pref.sex == 1) sex.check(R.id.sex_female);
 
@@ -205,9 +198,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			Calendar cal2 = Calendar.getInstance();
 			cal2.setTimeInMillis(DSTime);
 			daystart.setCurrentHour(cal2.get(Calendar.HOUR_OF_DAY));
-			//(int)Math.floor((double)DSTime/36000000)/1000);
 			daystart.setCurrentMinute(cal2.get(Calendar.MINUTE));
-			//(int)Math.floor(((double)DSTime%36000000)/1000));
 
 			if (Sex == 0) sex.check(R.id.sex_male);
 			else if (Sex == 1) sex.check(R.id.sex_female);

@@ -20,8 +20,6 @@ import com.adoctor.adoctor.pref.PreferenceData;
 */
 
 class Clock01 extends View {
-       //int mMax;
-       //int mPos;
        long TimeSum;
        
  
@@ -42,29 +40,9 @@ class Clock01 extends View {
  
        
        void init() {
-             //최대 크기
-    //         mMax = 1440; //하루 = 1440분
-             //현재 위치
-      //       mPos = 0;
-             
              TimeSum = 0;
        }
  
-/* 
-       //최대값 반환
-       int getMax() { return 1440; }
- 
-       //pos를 변경하는 메소드
-       void setPos(int aPos) {
-             if (aPos < 0 || aPos > mMax) {
-                    return;
-             }
-             mPos = aPos;
-             invalidate();//onDraw를 다시 부르는 메소드
-       }
- 
-       int getPos() { return mPos; }
-  */     
        void setTimeSum(long timeSum) {
     	   TimeSum = timeSum;
     	   invalidate();
