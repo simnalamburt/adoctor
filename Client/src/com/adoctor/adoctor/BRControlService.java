@@ -26,12 +26,18 @@ public class BRControlService extends Service {
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
 		registerReceiver(mScreenStateReceiver, filter);
 
-		return START_STICKY;
+		return START_REDELIVER_INTENT;
 	}
 	
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO 어떤 효과가 발생하는건지?
 		return null;
+	}
+
+	@Override
+	public void onDestroy() {
+		unregisterReceiver(mScreenStateReceiver);
+		super.onDestroy();
 	}
 }
