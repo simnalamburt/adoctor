@@ -1,10 +1,14 @@
 package com.adoctor.adoctor;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
 import com.adoctor.adoctor.DB.ScreenLog;
@@ -25,7 +31,13 @@ import com.adoctor.adoctor.pref.PreferenceData;
  * 최초 Activity. DB의 내용을 가져와 보여줌
  * @author Choi H.John, Sky77, Hyeon
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnTimeChangedListener {
+
+
+	Clock01 mClock01;
+	Handler mHandler;
+	Calendar DSTimeCal;
+
 
 	/**
 	 * 프로그램 진입점
@@ -33,10 +45,23 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
+		mClock01 = (Clock01) findViewById(R.id.clock01);
+		mHandler = new Handler() {
+			public void handleMessage(Message msg) {
+				mClock01.setTimeSum(refresh());
+				/*int Pos;
+                Pos = mClock01.getPos();
+                if(Pos<1440)
+                mClock01.setPos(Pos+1);
+                mHandler.sendEmptyMessageDelayed(0,60000);//1분마다 쓰레드 불러줌*/
+			}
+		};
+		DSTimeCal = Calendar.getInstance();
+
 		startService(new Intent(this, BRControlService.class));
 		refresh();
-		
+
 		if (!Preference.hasPref()) inputdata();
 	}
 	/**
@@ -47,7 +72,7 @@ public class MainActivity extends Activity {
 		refresh();
 	}
 
-	
+
 
 	// 메뉴
 	/**
@@ -78,63 +103,64 @@ public class MainActivity extends Activity {
 		}		
 	}
 
-	
-	
+
+
 	// 기능 정의
 	/**
 	 * 로그 새로고침 메서드
 	 */
-	private void refresh()
+	private long refresh()
 	{
 		ScreenLogEntity[] logs = ScreenLog.getInstance().SelectAll();
 
 		String msg = getResources().getString(R.string.log);
+
 		for(ScreenLogEntity log : logs)
 			msg += log.Time + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
-		
+
 		boolean swch = false;
 		long total_time = 0;
 		long on_time = 0;
-		for(ScreenLogEntity log : logs)
-		{
-			if(swch)
-			{
+		for(ScreenLogEntity log : logs) {
+			if(swch) {
 				if(log.State==ScreenState.On) on_time=log.Time;
-				else
-				{
+				else {
 					total_time+=log.Time-on_time;
 					swch=false;
 				}
 			}
-			else
-			{
-				if(log.State==ScreenState.On)
-				{
+
+			else {
+				if(log.State==ScreenState.On) {
 					swch=true;
 					on_time=log.Time;
 				}
-			}
+			}	
 		}
-		
-		msg += "켜져있던 총 시간 : "+( total_time/3600000 !=0 ? total_time/3600000+"시간 ":"" )+( total_time/60000 !=0 ? (total_time%3600000)/60000+"분 ":"" )+(total_time%60000)/1000+"초\n";
-		
-		((TextView) findViewById(R.id.logview)).setText(msg);
+
+		msg += "켜져있던 총 시간 : "+ (total_time/3600000 !=0 ? total_time/3600000+"시간 ":"" )+( total_time/60000 !=0 ? (total_time%3600000)/60000+"분 ":"" )+(total_time%60000)/1000+"초\n";
+
+		((TextView)findViewById(R.id.logview)).setText(msg);
+		mClock01.setTimeSum(total_time);
+
+		return total_time;
 	}
-	
+
 	/**
 	 * 정보 입력 창 호출 메서드
 	 * 어플리케이션 Preference가 없었을 경우(주로 최초실행시), Preference 입력이 강제된다
 	 */
-	private void inputdata() { inputdata(null, 0, -1); }
-	
+	private void inputdata() { inputdata(null, 0, -1, 6*3600*1000); }
+
 	/**
 	 * 정보 입력 창 호출 메서드
 	 * 입력창에 미리 입력을 주고 싶은 경우 사용
 	 * @param Age 나이 (nullable)
 	 * @param Job 직업
 	 * @param Sex 성별
+	 * @param DSTime 하루 시작 시간
 	 */
-	private void inputdata(Integer Age, int Job, int Sex)
+	private void inputdata(Integer Age, int Job, int Sex, long DSTime)
 	{
 		// 레이아웃 로드
 		LayoutInflater inf = getLayoutInflater();
@@ -145,16 +171,29 @@ public class MainActivity extends Activity {
 		final TextView age = (TextView)v2.findViewById(R.id.age);
 		final Spinner job = (Spinner)v2.findViewById(R.id.job);
 		final RadioGroup sex = (RadioGroup)v2.findViewById(R.id.sex);
-		
+
+		final TimePicker daystart = (TimePicker)v2.findViewById(R.id.dstimepicker);
+
+		daystart.setOnTimeChangedListener(this);
+		final long dstime = DSTimeCal.getTimeInMillis();
+
+
 		// 설정 읽어옴
 		PreferenceData pref = Preference.getPref();
 		if (pref != null) {
 			// 기존 설정이 있는경우
 			age.setText(Integer.toString(pref.age));
 			job.setSelection(pref.job);
+
+			Calendar cal1 = Calendar.getInstance();
+			cal1.setTimeInMillis(pref.dstime);
+			daystart.setCurrentHour(cal1.get(Calendar.HOUR_OF_DAY));
+			//(int)Math.floor((double)pref.dstime/36000000)/1000);
+			daystart.setCurrentMinute(cal1.get(Calendar.MINUTE));
+			//(int)Math.floor(((double)pref.dstime%36000000)/1000));
 			if (pref.sex == 0) sex.check(R.id.sex_male);
 			else if (pref.sex == 1) sex.check(R.id.sex_female);
-			
+
 			alert.setNegativeButton("취소", new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int which) { }
@@ -163,12 +202,19 @@ public class MainActivity extends Activity {
 			// 기존 설정이 없는경우
 			if (Age != null) age.setText(Age.toString());
 			job.setSelection(Job);
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTimeInMillis(DSTime);
+			daystart.setCurrentHour(cal2.get(Calendar.HOUR_OF_DAY));
+			//(int)Math.floor((double)DSTime/36000000)/1000);
+			daystart.setCurrentMinute(cal2.get(Calendar.MINUTE));
+			//(int)Math.floor(((double)DSTime%36000000)/1000));
+
 			if (Sex == 0) sex.check(R.id.sex_male);
 			else if (Sex == 1) sex.check(R.id.sex_female);
-			
+
 			alert.setCancelable(false);
 		}
-		
+
 		alert.setPositiveButton("확인", new DialogInterface.OnClickListener()
 		{
 			@Override
@@ -176,28 +222,38 @@ public class MainActivity extends Activity {
 			{
 				String textAge = age.getText().toString();
 				int radioid = sex.getCheckedRadioButtonId();
-				
+
 				Integer inputAge = textAge.equals("") ? null : Integer.parseInt(textAge);
 				int inputJob = job.getSelectedItemPosition();
 				int inputSex = radioid == -1 ? -1 : ( radioid == R.id.sex_male ? 0 : 1 );
-				
+
 				if (inputAge == null) {
 					Toast.makeText(App.getContext(), "나이를 입력해주세요 :)", Toast.LENGTH_SHORT).show();
-					inputdata(inputAge, inputJob, inputSex);
+					inputdata(inputAge, inputJob, inputSex, dstime);
 					return;
 				}
-				
+
 				if (inputSex == -1) {
 					Toast.makeText(App.getContext(), "성별을 입력해주세요", Toast.LENGTH_SHORT).show();
-					inputdata(inputAge, inputJob, inputSex);
+					inputdata(inputAge, inputJob, inputSex, dstime);
 					return;
 				}
-				
-				Preference.setPref(inputAge, inputJob, inputSex);
+
+				Preference.setPref(inputAge, inputJob, inputSex, dstime);
 			}
 		});
-		
+
 		alert.show();
 	}
-	
+
+	@Override
+	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+		DSTimeCal = Calendar.getInstance();
+
+		DSTimeCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		DSTimeCal.set(Calendar.MINUTE, minute);
+		DSTimeCal.set(Calendar.SECOND, 0);
+
+	}	
+
 }

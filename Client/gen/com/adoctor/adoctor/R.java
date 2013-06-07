@@ -26,21 +26,25 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int intro_480x800_9patch=0x7f020001;
     }
     public static final class id {
-        public static final int age=0x7f090004;
-        public static final int deletebtn=0x7f09000b;
-        public static final int input_layout=0x7f090002;
-        public static final int inputdata=0x7f09000c;
-        public static final int job=0x7f090006;
-        public static final int lb_age=0x7f090003;
-        public static final int lb_job=0x7f090005;
-        public static final int lb_sex=0x7f090007;
-        public static final int logview=0x7f090001;
-        public static final int refreshbtn=0x7f090000;
-        public static final int sex=0x7f090008;
-        public static final int sex_female=0x7f09000a;
-        public static final int sex_male=0x7f090009;
+        public static final int age=0x7f090007;
+        public static final int clock01=0x7f090000;
+        public static final int deletebtn=0x7f09000e;
+        public static final int dstimepicker=0x7f090005;
+        public static final int input_layout=0x7f090003;
+        public static final int inputdata=0x7f09000f;
+        public static final int job=0x7f090009;
+        public static final int lb_age=0x7f090006;
+        public static final int lb_dstime=0x7f090004;
+        public static final int lb_job=0x7f090008;
+        public static final int lb_sex=0x7f09000a;
+        public static final int logview=0x7f090002;
+        public static final int refreshbtn=0x7f090001;
+        public static final int sex=0x7f09000b;
+        public static final int sex_female=0x7f09000d;
+        public static final int sex_male=0x7f09000c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -50,17 +54,17 @@ public final class R {
         public static final int main=0x7f080000;
     }
     public static final class string {
-        public static final int age=0x7f060005;
-        public static final int app_name=0x7f060000;
-        public static final int delete=0x7f060003;
-        public static final int inputdata=0x7f060004;
-        public static final int job=0x7f060006;
-        public static final int jobprompt=0x7f060007;
-        public static final int log=0x7f060002;
-        public static final int refresh=0x7f060001;
-        public static final int sex=0x7f060008;
-        public static final int sex_female=0x7f06000a;
-        public static final int sex_male=0x7f060009;
+        public static final int age=0x7f070005;
+        public static final int app_name=0x7f070000;
+        public static final int delete=0x7f070003;
+        public static final int inputdata=0x7f070004;
+        public static final int job=0x7f070006;
+        public static final int jobprompt=0x7f070007;
+        public static final int log=0x7f070002;
+        public static final int refresh=0x7f070001;
+        public static final int sex=0x7f070008;
+        public static final int sex_female=0x7f07000a;
+        public static final int sex_male=0x7f070009;
     }
     public static final class style {
         /** 
@@ -84,10 +88,11 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f070000;
+        public static final int AppBaseTheme=0x7f060001;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f070001;
+        public static final int AppTheme=0x7f060002;
+        public static final int SplashTheme=0x7f060000;
     }
 }

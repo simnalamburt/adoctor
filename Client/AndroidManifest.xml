@@ -34,8 +34,10 @@
             android:stopWithTask="false" >
         </service>
 
+        <receiver android:name="ScreenStateReceiver" >
+        </receiver>
         <receiver
-            android:name="ScreenStateReceiver"
+            android:name="com.adoctor.adoctor.ServiceStarter"
             android:enabled="true"
             android:exported="false" >
             <intent-filter>
