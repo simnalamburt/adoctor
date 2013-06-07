@@ -1,12 +1,10 @@
 ﻿# coding=utf-8
 
-from os import system
 from socket import *
 from thread import start_new_thread
 
-
-
 import msgpack
+
 
 host = ''
 port = 52301
@@ -16,10 +14,8 @@ backlog = 5
 
 # 사용자 연결 핸들러 정의
 def handler(clientsock, addr):
-    print u''
-    print u'────────────────────'
-    print u''
-    print u'○ ', addr
+    print u'\n────────────────────'
+    print u'\n○ ', addr
     try:
         # 네트워킹
         unpacker = msgpack.Unpacker()
@@ -29,12 +25,11 @@ def handler(clientsock, addr):
             unpacker.feed(packet)
         clientsock.close()
         msg = unpacker.unpack()
-        print u''
-        print repr(msg)
+        print u'\n', repr(msg)
 
         # 디시리얼라이즈
         version = msg['version']
-        print u'version :', version
+        print u'\nversion :', version
 
         data = msg['data']
 
@@ -45,12 +40,12 @@ def handler(clientsock, addr):
         print u'\t│'
 
         logs = data['logs']
-        print u'\t└ logs\t: (', len(logs), u')'
+        print u'\t└ logs\t:', len(logs)
         for log in logs:
             print u'\t\t', log
 
     except Exception as e:
-        print addr, u'Connection aborted by an error (', e.message, u')'
+        print addr, u'\nConnection aborted by an error (', e.message, u')'
 
 # Main 함수
 # 리스너 소켓을 등록하여, 사용자 연결을 대기한다

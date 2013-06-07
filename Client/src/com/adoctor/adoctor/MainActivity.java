@@ -170,10 +170,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		final Spinner job = (Spinner)v2.findViewById(R.id.job);
 		final RadioGroup sex = (RadioGroup)v2.findViewById(R.id.sex);
 
-		final TimePicker daystart = (TimePicker)v2.findViewById(R.id.dstimepicker);
-
-		daystart.setOnTimeChangedListener(this);
-
 		// 설정 읽어옴
 		PreferenceData pref = Preference.getPref();
 		if (pref != null) {
@@ -181,9 +177,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			age.setText(Integer.toString(pref.age));
 			job.setSelection(pref.job);
 
-			Calendar cal1 = Calendar.getInstance();
-			daystart.setCurrentHour(cal1.get(Calendar.HOUR_OF_DAY));
-			daystart.setCurrentMinute(cal1.get(Calendar.MINUTE));
 			if (pref.sex == 0) sex.check(R.id.sex_male);
 			else if (pref.sex == 1) sex.check(R.id.sex_female);
 
@@ -195,9 +188,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			// 기존 설정이 없는경우
 			if (Age != null) age.setText(Age.toString());
 			job.setSelection(Job);
-			Calendar cal2 = Calendar.getInstance();
-			daystart.setCurrentHour(cal2.get(Calendar.HOUR_OF_DAY));
-			daystart.setCurrentMinute(cal2.get(Calendar.MINUTE));
 
 			if (Sex == 0) sex.check(R.id.sex_male);
 			else if (Sex == 1) sex.check(R.id.sex_female);

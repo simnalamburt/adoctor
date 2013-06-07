@@ -7,17 +7,6 @@
     android:padding="10dip" >
 
     <TextView
-        android:id="@+id/lb_dstime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="하루 시작 시간" />
-
-    <TimePicker
-        android:id="@+id/dstimepicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
         android:id="@+id/lb_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
