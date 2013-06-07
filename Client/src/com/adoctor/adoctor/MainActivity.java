@@ -46,13 +46,16 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 
 		mClock01 = (Clock01) findViewById(R.id.clock01);
-		mHandler = new Handler() {
+		mClock01.setTimeSum(refresh());
+		
+		/*mHandler = new Handler() {
 			public void handleMessage(Message msg) {
-				mClock01.setTimeSum(refresh());
+				
 			}
-		};
+		};*/
 		DSTimeCal = Calendar.getInstance();
 
 		startService(new Intent(this, BRControlService.class));
