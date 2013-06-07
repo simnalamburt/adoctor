@@ -133,8 +133,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 				}
 			}	
 		}
-		
-		msg += "켜져있던 총 시간 : "+ (total_time/3600000 !=0 ? total_time/3600000+"시간 ":"" )+( total_time/60000 !=0 ? (total_time%3600000)/60000+"분 ":"" )+(total_time%60000)/1000+"초\n";
+		if(total_time!=0) msg += "켜져있던 총 시간 : "+ (total_time/3600000 !=0 ? total_time/3600000+"시간 ":"" )+( total_time/60000 !=0 ? (total_time%3600000)/60000+"분 ":"" )+(total_time%60000)/1000+"초\n";
 
 		((TextView)findViewById(R.id.logview)).setText(msg);
 		mClock01.setTimeSum(total_time);
