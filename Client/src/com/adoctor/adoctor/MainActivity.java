@@ -37,6 +37,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	
 	Clock01 mClock01;
 	Handler mHandler;
+	Calendar DSTimeCal;
 	
 	
 	/**
@@ -145,8 +146,9 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		final RadioGroup sex = (RadioGroup)v2.findViewById(R.id.sex);
 		
 		final TimePicker daystart = (TimePicker)v2.findViewById(R.id.dayStartPicker);
+		
 		daystart.setOnTimeChangedListener(this);
-		DSTimeCal	    		
+		final long dstime = DSTimeCal.getTimeInMillis();
 		
 		
 		// 설정 읽어옴
@@ -155,8 +157,13 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			// 기존 설정이 있는경우
 			age.setText(Integer.toString(pref.age));
 			job.setSelection(pref.job);
-			daystart.setCurrentHour((int)Math.floor((double)pref.dstime/36000000)/1000);
-			daystart.setCurrentMinute((int)Math.floor(((double)pref.dstime%36000000)/1000));
+			
+			Calendar cal1 = Calendar.getInstance();
+			cal1.setTimeInMillis(pref.dstime);
+			daystart.setCurrentHour(cal1.get(Calendar.HOUR_OF_DAY));
+					//(int)Math.floor((double)pref.dstime/36000000)/1000);
+			daystart.setCurrentMinute(cal1.get(Calendar.MINUTE));
+					//(int)Math.floor(((double)pref.dstime%36000000)/1000));
 			if (pref.sex == 0) sex.check(R.id.sex_male);
 			else if (pref.sex == 1) sex.check(R.id.sex_female);
 			
@@ -168,9 +175,12 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			// 기존 설정이 없는경우
 			if (Age != null) age.setText(Age.toString());
 			job.setSelection(Job);
-			daystart.setCurrentHour((int)Math.floor((double)DSTime/36000000)/1000);
-			daystart.setCurrentMinute((int)Math.floor(((double)DSTime%36000000)/1000));
-			
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTimeInMillis(DSTime);
+			daystart.setCurrentHour(cal2.get(Calendar.HOUR_OF_DAY));
+					//(int)Math.floor((double)DSTime/36000000)/1000);
+			daystart.setCurrentMinute(cal2.get(Calendar.MINUTE);
+					//(int)Math.floor(((double)DSTime%36000000)/1000));
 			
 			if (Sex == 0) sex.check(R.id.sex_male);
 			else if (Sex == 1) sex.check(R.id.sex_female);
@@ -190,21 +200,19 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 				int inputJob = job.getSelectedItemPosition();
 				int inputSex = radioid == -1 ? -1 : ( radioid == R.id.sex_male ? 0 : 1 );
 				
-				
-				
 				if (inputAge == null) {
 					Toast.makeText(App.getContext(), "나이를 입력해주세요 :)", Toast.LENGTH_SHORT).show();
-					inputdata(inputAge, inputJob, inputSex);
+					inputdata(inputAge, inputJob, inputSex, dstime);
 					return;
 				}
 				
 				if (inputSex == -1) {
 					Toast.makeText(App.getContext(), "성별을 입력해주세요", Toast.LENGTH_SHORT).show();
-					inputdata(inputAge, inputJob, inputSex);
+					inputdata(inputAge, inputJob, inputSex, dstime);
 					return;
 				}
 			
-				Preference.setPref(inputAge, inputJob, inputSex, input);
+				Preference.setPref(inputAge, inputJob, inputSex, dstime);
 			}
 		});
 		
@@ -213,8 +221,8 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	
 	@Override
 	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-		Calendar DSTimeCal = Calendar.getInstance();
-
+		DSTimeCal = Calendar.getInstance();
+		
 	    DSTimeCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 	    DSTimeCal.set(Calendar.MINUTE, minute);
 	    DSTimeCal.set(Calendar.SECOND, 0);
