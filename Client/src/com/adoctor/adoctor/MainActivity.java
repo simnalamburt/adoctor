@@ -1,5 +1,6 @@
 package com.adoctor.adoctor;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -9,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -112,7 +112,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		ScreenLogEntity[] logs = ScreenLog.getInstance().SelectAll();
 
 		String msg = getResources().getString(R.string.log);
-		SimpleDateFormat format = new SimpleDateFormat("yy.MM.dd hh:mm:ss");
+		DateFormat format = SimpleDateFormat.getTimeInstance();
 
 		for(ScreenLogEntity log : logs)
 			msg += format.format(log.Time) + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
