@@ -38,7 +38,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	Clock01 mClock01;
 	Handler mHandler;
 	Calendar DSTimeCal;
-	long total_time = 0;
 
 	/**
 	 * 프로그램 진입점
@@ -119,6 +118,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			msg += format.format(log.Time) + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
 
 		boolean swch = false;
+		long total_time = 0;
 		long on_time = 0;
 		for(ScreenLogEntity log : logs) {
 			if(swch) {
