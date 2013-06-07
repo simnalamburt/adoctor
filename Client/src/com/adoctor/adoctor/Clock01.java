@@ -9,8 +9,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.adoctor.adoctor.pref.Preference;
-import com.adoctor.adoctor.pref.PreferenceData;
-
 
 /**
 * 오늘 스마트폰 사용량을 시각적으로 나타내는 커스텀 위젯(custom view)
@@ -48,19 +46,17 @@ class Clock01 extends View {
     	   invalidate();
        }
  
+       private RectF rt = new RectF();
+       private Paint fillpnt = new Paint();
        protected void onDraw(Canvas canvas) {
     	   if(Preference.hasPref())
     	   {
-             
              //원을 만듦
-             RectF rt = new RectF();
              rt.left = getPaddingLeft();//왼쪽값
              rt.right = getWidth() - getPaddingRight();//오른쪽값
              rt.bottom = getHeight() - getPaddingTop();//아래쪽값
              rt.top = getPaddingTop();
-             
  
-             Paint fillpnt = new Paint();
              fillpnt.setColor(Color.RED);
              canvas.drawArc(rt, 0, 360, true, fillpnt);
  
@@ -72,11 +68,8 @@ class Clock01 extends View {
         
              fillpnt.setColor(Color.BLACK);
       
-             
-             PreferenceData pref = Preference.getPref();
-             
-             float startAngle = 360 * pref.dstime / (24*3600*1000); //시작 각도 float startAngle = dayStartingTime;
-             float sweepAngle = 360 * TimeSum / (24*3600*1000);//부채꼴의 각도는 계속 변함 float sweepAngle = 360 * (현재누적시간 + mPos) / mMax;
+             float startAngle = 360 * 6*3600*1000 / (24*3600*1000); //시작 각도 float startAngle = dayStartingTime;
+             float sweepAngle = 360 * TimeSum / (24*3600*1000); //부채꼴의 각도는 계속 변함 float sweepAngle = 360 * (현재누적시간 + mPos) / mMax;
       
              canvas.drawArc(rt, startAngle, sweepAngle, true, fillpnt);
              
@@ -91,7 +84,6 @@ class Clock01 extends View {
     	   }
     	   else
     	   {
-    		   Paint fillpnt = new Paint();
                fillpnt.setColor(Color.BLACK);
     		   canvas.drawText("설정이 없습니다.", 10, 10, fillpnt);
     	   }

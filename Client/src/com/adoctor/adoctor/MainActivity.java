@@ -148,7 +148,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	 * 정보 입력 창 호출 메서드
 	 * 어플리케이션 Preference가 없었을 경우(주로 최초실행시), Preference 입력이 강제된다
 	 */
-	private void inputdata() { inputdata(null, 0, -1, 6*3600*1000); }
+	private void inputdata() { inputdata(null, 0, -1); }
 
 	/**
 	 * 정보 입력 창 호출 메서드
@@ -158,7 +158,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	 * @param Sex 성별
 	 * @param DSTime 하루 시작 시간
 	 */
-	private void inputdata(Integer Age, int Job, int Sex, long DSTime)
+	private void inputdata(Integer Age, int Job, int Sex)
 	{
 		// 레이아웃 로드
 		LayoutInflater inf = getLayoutInflater();
@@ -173,8 +173,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		final TimePicker daystart = (TimePicker)v2.findViewById(R.id.dstimepicker);
 
 		daystart.setOnTimeChangedListener(this);
-		final long dstime = DSTimeCal.getTimeInMillis();
-
 
 		// 설정 읽어옴
 		PreferenceData pref = Preference.getPref();
@@ -184,7 +182,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			job.setSelection(pref.job);
 
 			Calendar cal1 = Calendar.getInstance();
-			cal1.setTimeInMillis(pref.dstime);
 			daystart.setCurrentHour(cal1.get(Calendar.HOUR_OF_DAY));
 			daystart.setCurrentMinute(cal1.get(Calendar.MINUTE));
 			if (pref.sex == 0) sex.check(R.id.sex_male);
@@ -199,7 +196,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 			if (Age != null) age.setText(Age.toString());
 			job.setSelection(Job);
 			Calendar cal2 = Calendar.getInstance();
-			cal2.setTimeInMillis(DSTime);
 			daystart.setCurrentHour(cal2.get(Calendar.HOUR_OF_DAY));
 			daystart.setCurrentMinute(cal2.get(Calendar.MINUTE));
 
@@ -223,17 +219,17 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 
 				if (inputAge == null) {
 					Toast.makeText(App.getContext(), "나이를 입력해주세요 :)", Toast.LENGTH_SHORT).show();
-					inputdata(inputAge, inputJob, inputSex, dstime);
+					inputdata(inputAge, inputJob, inputSex);
 					return;
 				}
 
 				if (inputSex == -1) {
 					Toast.makeText(App.getContext(), "성별을 입력해주세요", Toast.LENGTH_SHORT).show();
-					inputdata(inputAge, inputJob, inputSex, dstime);
+					inputdata(inputAge, inputJob, inputSex);
 					return;
 				}
 
-				Preference.setPref(inputAge, inputJob, inputSex, dstime);
+				Preference.setPref(inputAge, inputJob, inputSex);
 				refresh();
 			}
 		});
@@ -248,7 +244,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		DSTimeCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 		DSTimeCal.set(Calendar.MINUTE, minute);
 		DSTimeCal.set(Calendar.SECOND, 0);
-
 	}	
 
 }
