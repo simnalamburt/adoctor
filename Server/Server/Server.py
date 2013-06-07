@@ -19,6 +19,7 @@ def handler(clientsock, addr):
     print u''
     print u'────────────────────'
     print u''
+    print u'○ ', addr
     try:
         # 네트워킹
         unpacker = msgpack.Unpacker()
@@ -28,31 +29,28 @@ def handler(clientsock, addr):
             unpacker.feed(packet)
         clientsock.close()
         msg = unpacker.unpack()
+        print u''
+        print repr(msg)
 
         # 디시리얼라이즈
         version = msg['version']
+        print u'version :', version
+
         data = msg['data']
 
         pref = data['pref']
-        logs = data['logs']
-
-        age = pref['age']
-        job = pref['job']
-        sex = pref['sex']
-
-        print u'○ ', addr
-        print u'version :', version
-        print u'data\t┬ pref\t┬ age :', age
-        print u'\t│\t│ job :', job
-        print u'\t│\t└ sex :', sex
+        print u'data\t┬ pref\t┬ age :', pref['age']
+        print u'\t│\t│ job :', pref['job']
+        print u'\t│\t└ sex :', pref['sex']
         print u'\t│'
+
+        logs = data['logs']
         print u'\t└ logs\t: (', len(logs), u')'
         for log in logs:
             print u'\t\t', log
-        print u''
-        print repr(msg)
+
     except Exception as e:
-        print addr, u'Connection aborted by an error (', e, u')'
+        print addr, u'Connection aborted by an error (', e.message, u')'
 
 # Main 함수
 # 리스너 소켓을 등록하여, 사용자 연결을 대기한다
