@@ -1,5 +1,10 @@
 package com.adoctor.adoctor;
 
+import java.util.Calendar;
+
+import com.adoctor.adoctor.pref.Preference;
+import com.adoctor.adoctor.pref.PreferenceData;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -81,8 +86,10 @@ class Clock01 extends View {
         
              fillpnt.setColor(Color.BLACK);
       
-      
-             float startAngle = 0; //시작 각도 float startAngle = dayStartingTime;
+             
+             PreferenceData pref = Preference.getPref();
+             
+             float startAngle = 360 * pref.dstime / (24*3600*1000); //시작 각도 float startAngle = dayStartingTime;
              float sweepAngle = 360 * mPos / mMax;//부채꼴의 각도는 계속 변함 float sweepAngle = 360 * (현재누적시간 + mPos) / mMax;
       
              canvas.drawArc(rt, startAngle, sweepAngle, true, fillpnt);
