@@ -15,6 +15,7 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		
 		ScreenState state = ScreenState.fromStringOrNull(intent.getAction());
 		if (state != null) {
 			long time = System.currentTimeMillis();
