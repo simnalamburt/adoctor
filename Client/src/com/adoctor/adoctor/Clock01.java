@@ -82,9 +82,9 @@ class Clock01 extends View {
              
              //시침 표시
              fillpnt.setColor(Color.BLUE);
-             float timeAngle = 40; // 현재 시각
+             float timeAngle = 360 * System.currentTimeMillis() / (24*3600*1000);
              
-             canvas.drawArc(rt,  timeAngle, timeAngle + 1, true, fillpnt);
+             canvas.drawArc(rt,  timeAngle, 1, true, fillpnt);
              
              
              //TODO 현재시간, 사용량 숫자로 시계 위에 표시
