@@ -1,5 +1,6 @@
 package com.adoctor.adoctor;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
@@ -37,7 +38,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	Clock01 mClock01;
 	Handler mHandler;
 	Calendar DSTimeCal;
-
 
 	/**
 	 * 프로그램 진입점
@@ -109,9 +109,10 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		ScreenLogEntity[] logs = ScreenLog.getInstance().SelectAll();
 
 		String msg = getResources().getString(R.string.log);
+		SimpleDateFormat format = new SimpleDateFormat("yy.MM.dd hh:mm:ss");
 
 		for(ScreenLogEntity log : logs)
-			msg += log.Time + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
+			msg += format.format(log.Time) + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
 
 		boolean swch = false;
 		long total_time = 0;
@@ -132,7 +133,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 				}
 			}	
 		}
-
+		
 		msg += "켜져있던 총 시간 : "+ (total_time/3600000 !=0 ? total_time/3600000+"시간 ":"" )+( total_time/60000 !=0 ? (total_time%3600000)/60000+"분 ":"" )+(total_time%60000)/1000+"초\n";
 
 		((TextView)findViewById(R.id.logview)).setText(msg);
