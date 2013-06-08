@@ -12,7 +12,7 @@ import com.adoctor.adoctor.DB.ScreenLog;
  */
 public class ScreenStateReceiver extends BroadcastReceiver {
 	
-	long TimeScreenOn;
+	long TimeScreenOn = 0;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -20,7 +20,7 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 		if (action == Intent.ACTION_SCREEN_ON)
 		{
 			TimeScreenOn = System.currentTimeMillis();
-		} else if (action == Intent.ACTION_SCREEN_OFF) {
+		} else if (action == Intent.ACTION_SCREEN_OFF && TimeScreenOn != 0) {
 			long timeScreenOff = System.currentTimeMillis(); 
 			int duration = (int) (timeScreenOff - TimeScreenOn);
 			ScreenLog.getInstance().Insert(TimeScreenOn, duration);

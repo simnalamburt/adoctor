@@ -114,7 +114,7 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		DateFormat format = SimpleDateFormat.getTimeInstance();
 
 		for(ScreenLogEntity log : logs)
-			msg += format.format(log.Time) + "에 " + Double.toString( ((double)log.Duration) / 1000.0) + "초";
+			msg += format.format(log.Time) + "에 " + Double.toString( ((double)log.Duration) / 1000.0) + "초\n";
 
 		long TotalUsage = 0;
 		for(ScreenLogEntity log : logs)
