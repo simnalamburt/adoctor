@@ -28,7 +28,8 @@ public class ScreenLog extends Table {
 	private ScreenLog() {
 		super("ScreenLog", new ColumnBuilder(3)
 				.add("Time", "INTEGER NOT NULL")
-				.add("State", "INTEGER NOT NULL").get());
+				.add("Duration", "INTEGER NOT NULL")
+				.get());
 	}
 	
 	/**
@@ -36,12 +37,12 @@ public class ScreenLog extends Table {
 	 * @param Time 화면 상태가 변화한 시간
 	 * @param State 화면의 상태(true:켜짐, false:꺼짐)
 	 */
-	public void Insert(long Time, ScreenState State)
+	public void Insert(long Time, int Duration)
 	{
 		SQLiteDatabase db = DB.getInstance().getWritableDatabase();
 		ContentValues values = new ContentValues(2);
 		values.put(super.columns[0].Name, Time);
-		values.put(super.columns[1].Name, State.toInt());
+		values.put(super.columns[1].Name, Duration);
 		db.insert(super.tableName, null, values);
 		db.close();
 	}
@@ -60,7 +61,7 @@ public class ScreenLog extends Table {
 		if (cursor.moveToFirst()) {
 			do logs.add( new ScreenLogEntity(
 					cursor.getLong(0),
-					ScreenState.fromInt(cursor.getInt(1)) ) );
+					cursor.getInt(1) ) );
 			while (cursor.moveToNext());
 		}
 		cursor.close();
@@ -111,7 +112,7 @@ public class ScreenLog extends Table {
 					packer.writeMapBegin(2);
 					{
 						packer.write("version");
-						packer.write(0);
+						packer.write(1);
 						
 						packer.write("data");
 						packer.writeMapBegin(2);

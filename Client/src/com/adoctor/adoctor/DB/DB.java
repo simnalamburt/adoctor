@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DB extends SQLiteOpenHelper {
 	// Static members
 	static final String DB_NAME = "Adoctor.db";
-	static final int DB_VERSION = 1;
+	static final int DB_VERSION = 2;
 	
 	static final Table[] tables = { ScreenLog.getInstance() };
 	

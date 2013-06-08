@@ -15,17 +15,17 @@ import org.msgpack.unpacker.Unpacker;
 public class ScreenLogEntity implements MessagePackable {
 	// Non-static Member&Methods
 	public long Time;
-	public ScreenState State;
+	public int Duration;
 	
 	/**
 	 * ScreenLog 엔티티 인스턴스 생성
 	 * @param Time 화면 상태가 변화한 시간
 	 * @param State 화면의 상태
 	 */
-	public ScreenLogEntity(long Time, ScreenState State)
+	public ScreenLogEntity(long Time, int Duration)
 	{
 		this.Time = Time;
-		this.State = State;
+		this.Duration = Duration;
 	}
 
 	// MessagePack
@@ -36,7 +36,7 @@ public class ScreenLogEntity implements MessagePackable {
 	public void writeTo(Packer pk) throws IOException {
 		pk.writeArrayBegin(2);
 		pk.write(Time);
-		pk.write(State.toBoolean());
+		pk.write(Duration);
 		pk.writeArrayEnd();
 	}
 	/**
@@ -46,7 +46,7 @@ public class ScreenLogEntity implements MessagePackable {
 	public void readFrom(Unpacker u) throws IOException {
 		u.readArrayBegin();
 		Time = u.readLong();
-		State = ScreenState.fromBoolean(u.readBoolean());
+		Duration = u.readInt();
 		u.readArrayEnd(true);
 	}
 }

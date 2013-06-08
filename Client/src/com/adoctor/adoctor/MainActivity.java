@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.adoctor.adoctor.DB.ScreenLog;
 import com.adoctor.adoctor.DB.ScreenLogEntity;
-import com.adoctor.adoctor.DB.ScreenState;
 import com.adoctor.adoctor.pref.Preference;
 import com.adoctor.adoctor.pref.PreferenceData;
 
@@ -115,33 +114,18 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		DateFormat format = SimpleDateFormat.getTimeInstance();
 
 		for(ScreenLogEntity log : logs)
-			msg += format.format(log.Time) + "\t" + ( log.State == ScreenState.On ? "켜짐\n" : "꺼짐\n" );
+			msg += format.format(log.Time) + "에 " + Double.toString( ((double)log.Duration) / 1000.0) + "초";
 
-		boolean swch = false;
-		long total_time = 0;
-		long on_time = 0;
-		for(ScreenLogEntity log : logs) {
-			if(swch) {
-				if(log.State==ScreenState.On) on_time=log.Time;
-				else {
-					total_time+=log.Time-on_time;
-					swch=false;
-				}
-			}
-
-			else {
-				if(log.State==ScreenState.On) {
-					swch=true;
-					on_time=log.Time;
-				}
-			}	
-		}
-		if(total_time!=0) msg += "켜져있던 총 시간 : "+ (total_time/3600000 !=0 ? total_time/3600000+"시간 ":"" )+( total_time/60000 !=0 ? (total_time%3600000)/60000+"분 ":"" )+(total_time%60000)/1000+"초\n";
+		long TotalUsage = 0;
+		for(ScreenLogEntity log : logs)
+			TotalUsage += log.Duration;
+		
+		if(TotalUsage!=0) msg += "켜져있던 총 시간 : "+ (TotalUsage/3600000 !=0 ? TotalUsage/3600000+"시간 ":"" )+( TotalUsage/60000 !=0 ? (TotalUsage%3600000)/60000+"분 ":"" )+(TotalUsage%60000)/1000+"초\n";
 
 		((TextView)findViewById(R.id.logview)).setText(msg);
-		mClock01.setTimeSum(total_time);
+		mClock01.setTimeSum(TotalUsage);
 
-		return total_time;
+		return TotalUsage;
 	}
 
 	/**
