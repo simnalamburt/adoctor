@@ -33,28 +33,12 @@ import com.adoctor.adoctor.pref.PreferenceData;
  */
 public class MainActivity extends Activity implements OnTimeChangedListener {
 
-
-	Clock01 mClock01;
-	Handler mHandler;
-	Calendar DSTimeCal;
-
 	/**
 	 * 프로그램 진입점
 	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-
-		mClock01 = (Clock01) findViewById(R.id.clock01);
-		mClock01.setTimeSum(refresh());
-		
-		/*mHandler = new Handler() {
-			public void handleMessage(Message msg) {
-				
-			}
-		};*/
-		DSTimeCal = Calendar.getInstance();
 
 		startService(new Intent(this, BRControlService.class));
 		refresh();
@@ -68,8 +52,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 	public void onRefreshButton(View v) {
 		refresh();
 	}
-
-
 
 	// 메뉴
 	/**
@@ -127,7 +109,6 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 					+ Double.toString((TotalUsage%60000)/1000.0) + "초\n";
 
 		((TextView)findViewById(R.id.logview)).setText(msg);
-		mClock01.setTimeSum(TotalUsage);
 
 		return TotalUsage;
 	}
@@ -214,14 +195,4 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 
 		alert.show();
 	}
-
-	@Override
-	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-		DSTimeCal = Calendar.getInstance();
-
-		DSTimeCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-		DSTimeCal.set(Calendar.MINUTE, minute);
-		DSTimeCal.set(Calendar.SECOND, 0);
-	}	
-
 }
