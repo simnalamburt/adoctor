@@ -114,13 +114,17 @@ public class MainActivity extends Activity implements OnTimeChangedListener {
 		DateFormat format = SimpleDateFormat.getTimeInstance();
 
 		for(ScreenLogEntity log : logs)
-			msg += format.format(log.Time) + "에 " + Double.toString( ((double)log.Duration) / 1000.0) + "초\n";
+			msg += format.format(log.Time) + "에 " + Double.toString( log.Duration / 1000.0) + "초\n";
 
 		long TotalUsage = 0;
 		for(ScreenLogEntity log : logs)
 			TotalUsage += log.Duration;
 		
-		if(TotalUsage!=0) msg += "켜져있던 총 시간 : "+ (TotalUsage/3600000 !=0 ? TotalUsage/3600000+"시간 ":"" )+( TotalUsage/60000 !=0 ? (TotalUsage%3600000)/60000+"분 ":"" )+(TotalUsage%60000)/1000+"초\n";
+		if(TotalUsage > 0)
+			msg += "켜져있던 총 시간 : "
+					+ (TotalUsage/3600000 !=0 ? TotalUsage/3600000+"시간 ":"" )
+					+ (TotalUsage/60000 !=0 ? (TotalUsage%3600000)/60000+"분 ":"" )
+					+ Double.toString((TotalUsage%60000)/1000.0) + "초\n";
 
 		((TextView)findViewById(R.id.logview)).setText(msg);
 		mClock01.setTimeSum(TotalUsage);
