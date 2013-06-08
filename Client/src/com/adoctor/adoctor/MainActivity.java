@@ -2,14 +2,12 @@ package com.adoctor.adoctor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
 import com.adoctor.adoctor.DB.ScreenLog;
@@ -31,7 +27,7 @@ import com.adoctor.adoctor.pref.PreferenceData;
  * 최초 Activity. DB의 내용을 가져와 보여줌
  * @author Choi H.John, Sky77, Hyeon
  */
-public class MainActivity extends Activity implements OnTimeChangedListener {
+public class MainActivity extends Activity {
 
 	/**
 	 * 프로그램 진입점
