@@ -17,10 +17,10 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-		if (action == Intent.ACTION_SCREEN_ON)
+		if (action.equals(Intent.ACTION_SCREEN_ON))
 		{
 			TimeScreenOn = System.currentTimeMillis();
-		} else if (action == Intent.ACTION_SCREEN_OFF && TimeScreenOn != 0) {
+		} else if (action.equals(Intent.ACTION_SCREEN_OFF) && TimeScreenOn != 0) {
 			long timeScreenOff = System.currentTimeMillis(); 
 			int duration = (int) (timeScreenOff - TimeScreenOn);
 			ScreenLog.getInstance().Insert(TimeScreenOn, duration);
