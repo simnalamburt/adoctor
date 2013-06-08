@@ -1,11 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/deletebtn"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/delete"/>
-    <item
         android:id="@+id/inputdata"
         android:orderInCategory="100"
         android:showAsAction="never"

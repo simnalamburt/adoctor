@@ -2,12 +2,19 @@ package com.adoctor.adoctor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +47,8 @@ public class MainActivity extends Activity {
 		refresh();
 
 		if (!Preference.hasPref()) inputdata();
+		
+		registerAlarm();
 	}
 	/**
 	 * DB의 내용을 가져와 TextView에 뿌려줌 새로고침 버튼을 눌렀을 때 호출됨
@@ -66,10 +75,6 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId())
 		{
-		case R.id.deletebtn:
-			ScreenLog.getInstance().Flush();
-			refresh();
-			return true;
 		case R.id.inputdata:
 			inputdata();
 			return true;
@@ -97,7 +102,7 @@ public class MainActivity extends Activity {
 		long TotalUsage = 0;
 		for(ScreenLogEntity log : logs)
 			TotalUsage += log.Duration;
-		
+
 		if(TotalUsage > 0)
 			msg += "켜져있던 총 시간 : "
 					+ (TotalUsage/3600000 !=0 ? TotalUsage/3600000+"시간 ":"" )
@@ -190,5 +195,29 @@ public class MainActivity extends Activity {
 		});
 
 		alert.show();
+	}
+	public void registerAlarm()
+	{
+
+		Intent intent = new Intent(this, EverydayService.class);
+		PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+		// 내일 0시 0분에 처음 시작해서, 24시간 마다 실행되게
+		GregorianCalendar tomorrow = new GregorianCalendar();
+		tomorrow = new GregorianCalendar(tomorrow.get(Calendar.YEAR),tomorrow.get(Calendar.MONTH),tomorrow.get(Calendar.DATE));
+		tomorrow.add(Calendar.DATE, 1);
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		am.setInexactRepeating(AlarmManager.RTC, tomorrow.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
+
+	}
+	
+	public class EverydayService extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			ScreenLog.getInstance().Flush();
+			refresh();
+		}
+
 	}
 }
