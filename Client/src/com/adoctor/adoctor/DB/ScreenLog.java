@@ -7,8 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Message;
 
-import com.adoctor.adoctor.WeakReferencedHandler;
 import com.adoctor.adoctor.Network.Network;
+import com.adoctor.adoctor.util.WeakReferencedHandler;
 
 /**
  * ScreenLog 테이블 싱글톤 클래스

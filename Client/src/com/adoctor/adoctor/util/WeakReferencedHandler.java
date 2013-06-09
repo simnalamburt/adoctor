@@ -1,4 +1,4 @@
-package com.adoctor.adoctor;
+package com.adoctor.adoctor.util;
 
 import java.lang.ref.WeakReference;
 

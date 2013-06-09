@@ -47,8 +47,8 @@ public class BRControlService extends Service {
 	}
 
 	void registerRestartAlarm() {
-		Intent intent = new Intent(BRControlService.this, RestartService.class);
-		intent.setAction(RestartService.ACTION_RESTART_PERSISTENTSERVICE);
+		Intent intent = new Intent(BRControlService.this, ServiceRestarter.class);
+		intent.setAction(ServiceRestarter.ACTION_RESTART_PERSISTENTSERVICE);
 		PendingIntent sender = PendingIntent.getBroadcast(
 				BRControlService.this, 0, intent, 0); // 브로드케스트할 Intent
 		long firstTime = SystemClock.elapsedRealtime();  // 현재 시간
@@ -59,8 +59,8 @@ public class BRControlService extends Service {
 	}
 
 	void unregisterRestartAlarm() {
-		Intent intent = new Intent(BRControlService.this, RestartService.class);
-		intent.setAction(RestartService.ACTION_RESTART_PERSISTENTSERVICE);
+		Intent intent = new Intent(BRControlService.this, ServiceRestarter.class);
+		intent.setAction(ServiceRestarter.ACTION_RESTART_PERSISTENTSERVICE);
 		PendingIntent sender = PendingIntent.getBroadcast(
 				BRControlService.this, 0, intent, 0);
 		AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);

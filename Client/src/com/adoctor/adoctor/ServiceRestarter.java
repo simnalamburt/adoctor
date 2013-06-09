@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-public class RestartService extends BroadcastReceiver {
+public class ServiceRestarter extends BroadcastReceiver {
 
 	public static final String ACTION_RESTART_PERSISTENTSERVICE = "RESTART";
 

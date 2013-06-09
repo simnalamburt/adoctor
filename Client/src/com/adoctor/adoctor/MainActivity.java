@@ -25,6 +25,7 @@ import com.adoctor.adoctor.DB.ScreenLogEntity;
 import com.adoctor.adoctor.Network.Network;
 import com.adoctor.adoctor.pref.Preference;
 import com.adoctor.adoctor.pref.PreferenceData;
+import com.adoctor.adoctor.util.WeakReferencedHandler;
 
 /**
  * 최초 Activity. DB의 내용을 가져와 보여줌
