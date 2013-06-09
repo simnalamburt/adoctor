@@ -192,7 +192,6 @@ public class MainActivity extends Activity {
 					+ Double.toString((TotalUsage%60000)/1000.0) + "초\n";
 
 		((TextView)findViewById(R.id.logview)).setText(msg);
-		((Clock01)findViewById(R.id.clock01)).setTimeSum(TotalUsage);
 	}
 	/**
 	 * 로그 비움&전송 메서드
