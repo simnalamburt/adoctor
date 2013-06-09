@@ -24,6 +24,7 @@ public class ScreenStateReceiver extends BroadcastReceiver {
 			long timeScreenOff = System.currentTimeMillis(); 
 			int duration = (int) (timeScreenOff - TimeScreenOn);
 			ScreenLog.getInstance().Insert(TimeScreenOn, duration);
+			TimeScreenOn = 0;
 		}
 	}
 }

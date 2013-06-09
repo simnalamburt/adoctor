@@ -12,10 +12,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DB extends SQLiteOpenHelper {
 	// Static members
-	static final String DB_NAME = "Adoctor.db";
-	static final int DB_VERSION = 2;
-	
+	public static final int DB_VERSION = ScreenLog.TABLE_VERSION;
 	static final Table[] tables = { ScreenLog.getInstance() };
+	
+	static final String DB_NAME = "Adoctor.db";
 	
 	
 

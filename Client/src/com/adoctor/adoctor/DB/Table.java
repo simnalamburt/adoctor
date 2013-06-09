@@ -33,8 +33,8 @@ class ColumnBuilder
  * @author Hyeon
  */
 abstract class Table {
-	final String tableName;
-	final Column[] columns;
+	protected final String tableName;
+	protected final Column[] columns;
 	
 	/**
 	 * Table 클래스 생성자. 외부 패키지로부터의 인스턴스화는 금지되어있음

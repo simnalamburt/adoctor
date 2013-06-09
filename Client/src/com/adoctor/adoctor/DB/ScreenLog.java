@@ -1,26 +1,24 @@
 package com.adoctor.adoctor.DB;
 
-import java.net.Socket;
 import java.util.ArrayList;
-
-import org.msgpack.MessagePack;
-import org.msgpack.packer.BufferPacker;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
-import android.widget.Toast;
+import android.os.Message;
 
-import com.adoctor.adoctor.App;
-import com.adoctor.adoctor.pref.Preference;
-import com.adoctor.adoctor.pref.PreferenceData;
+import com.adoctor.adoctor.WeakReferencedHandler;
+import com.adoctor.adoctor.Network.Network;
 
 /**
  * ScreenLog 테이블 싱글톤 클래스
  * @author Hyeon
  */
 public class ScreenLog extends Table {
+	static final int TABLE_VERSION = 2;
+	
+	
+	
 	// Non-static methods
 	/**
 	 * ScreenLog 클래스 생성자. 외부 클래스로부터의 인스턴스화가 금지되어있음.
@@ -30,6 +28,8 @@ public class ScreenLog extends Table {
 				.add("Time", "INTEGER NOT NULL")
 				.add("Duration", "INTEGER NOT NULL")
 				.get());
+		
+		Network.AddHandler(onSendDone);
 	}
 	
 	/**
@@ -71,90 +71,24 @@ public class ScreenLog extends Table {
 	}
 
 	/**
-	 * ScreenLog 테이블의 내용을 모두 서버로 보내고, 테이블을 비움 
+	 * Network 작업이 실행되고나면 호출되는 콜백 메서드
+	 * 어차피 싱글톤 객체라서 ScreenLog 객체는 영원히 사라지지 않으므로, HandlerLeak 경고 Suppress
 	 */
-	public void Flush()
-	{
-		new ScreenLogSender().execute();
-	}
-	
-	private class ScreenLogSender extends AsyncTask<Void, Void, Boolean> {
-		
-		// TODO 하드코딩 수정 (네트워크 설정)
-		private static final String host = "uriel.upnl.org";
-		private static final int port = 52301;
-		
-		private PreferenceData pref;
-		private ScreenLogEntity[] logs;
-		private Exception exception;
-		
-		/**
-		 * DB의 내용을 받아옴. UI 스레드에서 실행됨
-		 */
+	private WeakReferencedHandler<ScreenLog> onSendDone = new WeakReferencedHandler<ScreenLog>(this) {
 		@Override
-		protected void onPreExecute() {
-			pref = Preference.getPref();
-			logs = ScreenLog.getInstance().SelectAll();
-		}
-
-		/**
-		 * 네트워크 I/O 수행. 별도 스레드에서 실행됨
-		 */
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			try {
-				// TODO 순서 최적화
-				Socket socket = new Socket(host, port);
-				try {
-					MessagePack msgpack = new MessagePack();
-					BufferPacker packer = msgpack.createBufferPacker();
-					
-					packer.writeMapBegin(2);
-					{
-						packer.write("version");
-						packer.write(1);
-						
-						packer.write("data");
-						packer.writeMapBegin(2);
-						{
-							packer.write("pref");
-							packer.write(pref);
-							
-							packer.write("logs");
-							packer.write(logs);
-						}
-						packer.writeMapEnd();
-					}
-					packer.writeMapEnd();
-					
-					byte[] bytes = packer.toByteArray();
-					socket.getOutputStream().write(bytes);
-				} finally {
-					socket.close();
-				}
-				return true;
-			} catch (Exception e) {
-				exception = e;
-				return false;
-			}
-		}
-
-		/**
-		 * 네트워크 작업이 성공적으로 끝났을 경우, 로컬DB의 내용을 삭제
-		 */
-		@Override
-		protected void onPostExecute(Boolean succeeded) {
-			if (succeeded) {
+		public void handleMessage(ScreenLog instance, Message msg) {
+			switch (msg.what)
+			{
+			case Network.NETWORK_SUCCEEDED:
 				SQLiteDatabase db = DB.getInstance().getWritableDatabase();
 				db.delete(tableName, null, null);
 				db.close();
-			} else {
-				Toast.makeText(App.getContext(), exception.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+				break;
 			}
 		}
-	}
+	};
 	
-		
+	
 	
 	// Static subclass&method to support singleton pattern
 	/**
