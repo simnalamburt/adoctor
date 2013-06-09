@@ -35,7 +35,7 @@ public class ScreenLog extends Table {
 	/**
 	 * ScreenLog 테이블에 새 엔티티 삽입
 	 * @param Time 화면 상태가 변화한 시간
-	 * @param State 화면의 상태(true:켜짐, false:꺼짐)
+	 * @param Duration 화면켜진채로 유지된 시간
 	 */
 	public void Insert(long Time, int Duration)
 	{

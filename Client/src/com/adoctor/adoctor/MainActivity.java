@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,7 +52,7 @@ public class MainActivity extends Activity {
 	public void onRefreshButton(View v) {
 		refreshScreenLog();
 	}
-	
+
 
 
 	// 메뉴
