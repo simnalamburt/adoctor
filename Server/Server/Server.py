@@ -2,14 +2,16 @@
 
 from socket import *
 from thread import start_new_thread
-import msgpack
-
+import mysql
 
 host = ''
 port = 52301
 msglen = 8192
 encoding = 'UTF-8'
 backlog = 5
+
+# ProjectAdoctor
+# AjrPotccoe,13trdo20!
 
 # 사용자 연결 핸들러 정의
 def handler(clientsock, addr):
