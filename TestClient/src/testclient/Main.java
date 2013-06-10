@@ -13,7 +13,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.msgpack.MessagePack;
 import org.msgpack.MessagePackable;
-import org.msgpack.packer.BufferPacker;
 import org.msgpack.packer.Packer;
 import org.msgpack.unpacker.Unpacker;
 
@@ -78,13 +77,10 @@ public class Main {
 		System.out.println("● '"+escape+"' 입력시 프로그램 종료");
 
 		Dummy dummy = new Dummy();
-		
 		try (Scanner scanner = new Scanner(System.in)) {
 			while (!scanner.nextLine().equals(escape)) {
 				MessagePack msgpack = new MessagePack();
-				BufferPacker packer = msgpack.createBufferPacker();
-				packer.write(dummy);
-				byte[] bytes = packer.toByteArray();
+				byte[] bytes = msgpack.write(dummy);
 				
 				try (Socket socket = new Socket(host, port)) {
 					socket.getOutputStream().write(bytes);
@@ -102,38 +98,46 @@ public class Main {
  */
 class Dummy implements MessagePackable
 {
+	public static Random rand = new Random();
+	
 	/**
 	 * 시리얼라이저
 	 */
 	@Override
 	public void writeTo(Packer packer) throws IOException {
 		packer.writeMapBegin(2);
-		packer.write("version");
-		packer.write(0);
-
-		packer.write("data");
-		packer.writeMapBegin(2);
-		packer.write("pref");
-		packer.writeMapBegin(3);
-		packer.write("age");
-		packer.write(20);
-		packer.write("job");
-		packer.write(4);
-		packer.write("sex");
-		packer.write(0);
-		packer.writeMapEnd();
-
-		packer.write("logs");
-		int count = 2 * new Random().nextInt(3);
-		packer.writeArrayBegin(count);
-		for (int i = 0; i < count; ++i) {
-			packer.writeArrayBegin(2);
-			packer.write(System.currentTimeMillis());
-			packer.write(count % 2 == 0);
-			packer.writeArrayEnd();
+		{
+			packer.write("version");
+			packer.write(0);
+	
+			packer.write("data");
+			packer.writeMapBegin(2);
+			{
+				packer.write("pref");
+				packer.writeMapBegin(3);
+				{
+					packer.write("age");
+					packer.write(20);
+					packer.write("job");
+					packer.write(4);
+					packer.write("sex");
+					packer.write(0);
+				}
+				packer.writeMapEnd();
+		
+				packer.write("logs");
+				int count = rand.nextInt(3);
+				packer.writeArrayBegin(count);
+				for (int i = 0; i < count; ++i) {
+					packer.writeArrayBegin(2);
+					packer.write(System.currentTimeMillis());
+					packer.write(rand.nextInt(10000));
+					packer.writeArrayEnd();
+				}
+				packer.writeArrayEnd();
+			}
+			packer.writeMapEnd();
 		}
-		packer.writeArrayEnd();
-		packer.writeMapEnd();
 		packer.writeMapEnd();
 	}
 	/**
