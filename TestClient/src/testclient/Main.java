@@ -12,9 +12,7 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.msgpack.MessagePack;
-import org.msgpack.MessagePackable;
-import org.msgpack.packer.Packer;
-import org.msgpack.unpacker.Unpacker;
+import org.msgpack.packer.BufferPacker;
 
 /**
  * 프로그램 진입점
@@ -35,12 +33,8 @@ public class Main {
 	 *            "uriel.upnl.org" -p, -port [number] : 포트번호 변경. 기본값은 52301
 	 */
 	public static void main(String[] args) {
-		try {
-			ParseCmd(args);
-			Send();
-		} catch (Exception e) {
-			System.out.println("△ " + e.getLocalizedMessage());
-		}
+		ParseCmd(args);
+		MainLoop();
 	}
 
 	/**
@@ -51,13 +45,19 @@ public class Main {
 	 * @throws ParseException
 	 *             커맨드라인 파싱이 실패했을 경우 발생
 	 */
-	public static void ParseCmd(String[] Args) throws ParseException {
+	private static void ParseCmd(String[] Args) {
 		Options options = new Options();
 		options.addOption("h", "host", true, "host name");
 		options.addOption("p", "port", true, "port number");
 
 		CommandLineParser parser = new GnuParser();
-		CommandLine cmd = parser.parse(options, Args);
+		CommandLine cmd;
+		try {
+			cmd = parser.parse(options, Args);
+		} catch (ParseException e) {
+			System.out.println("△ 커맨드라인 파싱 실패, 기본값 사용");
+			return;
+		}
 
 		if (cmd.hasOption("h"))
 			host = cmd.getOptionValue("h");
@@ -71,78 +71,77 @@ public class Main {
 	 * @throws IOException
 	 * @throws UnknownHostException
 	 */
-	public static void Send() throws UnknownHostException, IOException {
+	public static void MainLoop() {
 		System.out.println("○ 호스트 : " + host);
 		System.out.println("○ 포트 : " + port);
 		System.out.println("● '"+escape+"' 입력시 프로그램 종료");
-
-		Dummy dummy = new Dummy();
+		
 		try (Scanner scanner = new Scanner(System.in)) {
 			while (!scanner.nextLine().equals(escape)) {
-				MessagePack msgpack = new MessagePack();
-				byte[] bytes = msgpack.write(dummy);
-				
-				try (Socket socket = new Socket(host, port)) {
-					socket.getOutputStream().write(bytes);
-				}
-				
-				System.out.print("전송 : " + bytes.toString() + "   ");
+				for(int i=0; i<10; ++i)
+					new Thread(onSend).start();
 			}
 		}
 	}
-}
-
-/**
- * 더미 입력 클래스
- * @author Hyeon
- */
-class Dummy implements MessagePackable
-{
-	public static Random rand = new Random();
 	
 	/**
-	 * 시리얼라이저
+	 * 스레드 행동 정의
 	 */
-	@Override
-	public void writeTo(Packer packer) throws IOException {
-		packer.writeMapBegin(2);
-		{
-			packer.write("version");
-			packer.write(0);
-	
-			packer.write("data");
-			packer.writeMapBegin(2);
-			{
-				packer.write("pref");
-				packer.writeMapBegin(3);
+	private static Runnable onSend = new Runnable() {
+		@Override
+		public void run() {
+			Random rand = new Random();
+			MessagePack msgpack = new MessagePack();
+			BufferPacker packer = msgpack.createBufferPacker();
+			
+			try {
+				packer.writeMapBegin(2);
 				{
-					packer.write("age");
-					packer.write(20);
-					packer.write("job");
-					packer.write(4);
-					packer.write("sex");
+					packer.write("version");
 					packer.write(0);
+			
+					packer.write("data");
+					packer.writeMapBegin(2);
+					{
+						packer.write("pref");
+						packer.writeMapBegin(3);
+						{
+							packer.write("age");
+							packer.write(20);
+							packer.write("job");
+							packer.write(4);
+							packer.write("sex");
+							packer.write(0);
+						}
+						packer.writeMapEnd();
+				
+						packer.write("logs");
+						int count = 5 + rand.nextInt(5);
+						packer.writeArrayBegin(count);
+						for (int i = 0; i < count; ++i) {
+							packer.writeArrayBegin(2);
+							packer.write(System.currentTimeMillis());
+							packer.write(rand.nextInt(10000));
+							packer.writeArrayEnd();
+						}
+						packer.writeArrayEnd();
+					}
+					packer.writeMapEnd();
 				}
 				packer.writeMapEnd();
-		
-				packer.write("logs");
-				int count = rand.nextInt(3);
-				packer.writeArrayBegin(count);
-				for (int i = 0; i < count; ++i) {
-					packer.writeArrayBegin(2);
-					packer.write(System.currentTimeMillis());
-					packer.write(rand.nextInt(10000));
-					packer.writeArrayEnd();
+				
+				byte[] bytes = packer.toByteArray();
+				try (Socket socket = new Socket(host, port)) {
+					socket.getOutputStream().write(bytes);
+					System.out.println("전송성공 : " + bytes.toString());
+				} catch (UnknownHostException e) {
+					System.out.println("Host와의 연결에 실패 : " + e);
+				} catch (IOException e) {
+					System.out.println("네트워크 I/O 도중 예외발생 : " + e);
 				}
-				packer.writeArrayEnd();
+			} catch (IOException e) {
+				System.out.println("MsgPack 생성중 예외발생 : " + e);
 			}
-			packer.writeMapEnd();
 		}
-		packer.writeMapEnd();
-	}
-	/**
-	 * 디시리얼라이저
-	 */
-	@Override
-	public void readFrom(Unpacker u) throws IOException { }
+	};
 }
