@@ -2,7 +2,8 @@
 
 from socket import *
 from thread import start_new_thread
-import mysql
+import msgpack
+import MySQLdb
 
 host = ''
 port = 52301
@@ -10,8 +11,13 @@ msglen = 8192
 encoding = 'UTF-8'
 backlog = 5
 
-# ProjectAdoctor
-# AjrPotccoe,13trdo20!
+db = MySQLdb.connect(
+    user='simnalamburt',
+    passwd='AjrPotccoe,13trdo20!',
+    db='simnalamburt')
+
+sql = "INSERT INTO ScreenLog(Time,Duration, Age, Job, Sex)\
+    VALUES(%d,%d,%d,%d,%d)"
 
 # 사용자 연결 핸들러 정의
 def handler(clientsock, addr):
@@ -35,15 +41,25 @@ def handler(clientsock, addr):
         data = msg['data']
 
         pref = data['pref']
-        print u'data\t┬ pref\t┬ age :', pref['age']
-        print u'\t│\t│ job :', pref['job']
-        print u'\t│\t└ sex :', pref['sex']
+        age = pref['age']
+        job = pref['job']
+        sex = pref['sex']
+        print u'data\t┬ pref\t┬ age :', age
+        print u'\t│\t│ job :', job
+        print u'\t│\t└ sex :', sex
         print u'\t│'
 
         logs = data['logs']
         print u'\t└ logs\t:', len(logs)
-        for log in logs:
-            print u'\t\t', log
+        try:
+            cursor = db.cursor()
+            for (Time,Duration) in logs:
+                cursor.execute(sql % (Time, Duration, age, job, sex))
+                print u'\t\t', Time, Duration
+            cursor.close()
+            db.commit()
+        except MySQLdb.Error, e:
+            db.rollback()
 
     except Exception as e:
         print addr, u'\nConnection aborted by an error (', e.message, u')'
@@ -58,6 +74,10 @@ if __name__ == '__main__':
     serversock.bind((host, port))
     serversock.listen(backlog)
     print u'● 서버 작동시작'
-    while 1:
-        clientsock, (addr, port) = serversock.accept()
-        start_new_thread(handler, (clientsock, addr))
+    try:
+        while 1:
+            clientsock, (addr, port) = serversock.accept()
+            start_new_thread(handler, (clientsock, addr))
+    except:
+        db.close()
+        print u'서버 종료'
