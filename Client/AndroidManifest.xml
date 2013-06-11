@@ -53,6 +53,7 @@
                 </action>
             </intent-filter>
         </receiver>
+        <receiver android:name="LogSender"/>
     </application>
 
 </manifest>
