@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,7 +42,7 @@ public class MainActivity extends Activity {
 		startService(new Intent(this, BRControlService.class));
 		refreshScreenLog();
 		if (!Preference.hasPref()) editPreference();
-		
+
 		Network.AddHandler(onSendDone);
 	}
 	/**
@@ -53,8 +52,6 @@ public class MainActivity extends Activity {
 	public void onRefreshButton(View v) {
 		refreshScreenLog();
 	}
-
-
 
 	// 메뉴
 	/**
@@ -73,9 +70,6 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId())
 		{
-		case R.id.deletebtn:
-			flushScreenLog();
-			return true;
 		case R.id.inputdata:
 			editPreference();
 			return true;
@@ -83,7 +77,7 @@ public class MainActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}		
 	}
-	
+
 
 
 	// 기능 정의
@@ -185,7 +179,7 @@ public class MainActivity extends Activity {
 			msg += format.format(log.Time) + "에 " + Double.toString( log.Duration / 1000.0) + "초\n";
 			TotalUsage += log.Duration;
 		}
-		
+
 		if(TotalUsage > 0)
 			msg += "켜져있던 총 시간 : "
 					+ (TotalUsage/3600000 !=0 ? TotalUsage/3600000+"시간 ":"" )
