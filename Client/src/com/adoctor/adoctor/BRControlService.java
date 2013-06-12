@@ -52,7 +52,7 @@ public class BRControlService extends Service {
 	}
 
 	void registerRestartAlarm() {
-		Intent intent = new Intent(BRControlService.this, ServiceRestarter.class);
+		Intent intent = new Intent(this, ServiceRestarter.class);
 		intent.setAction(ServiceRestarter.ACTION_RESTART_PERSISTENTSERVICE);
 		PendingIntent sender = PendingIntent.getBroadcast(
 				BRControlService.this, 0, intent, 0); // 브로드케스트할 Intent
