@@ -22,8 +22,6 @@ public class Main {
 	// TODO 하드코딩 (서버 설정)
 	private static String host = "uriel.upnl.org";
 	private static int port = 52301;
-	
-	private static String escape = "exit";
 
 	/**
 	 * 프로그램 진입점
@@ -74,11 +72,13 @@ public class Main {
 	public static void MainLoop() {
 		System.out.println("○ 호스트 : " + host);
 		System.out.println("○ 포트 : " + port);
-		System.out.println("● '"+escape+"' 입력시 프로그램 종료");
+		System.out.println("● 0 입력시 프로그램 종료");
 		
 		try (Scanner scanner = new Scanner(System.in)) {
-			while (!scanner.nextLine().equals(escape)) {
-				for(int i=0; i<10; ++i)
+			while (true) {
+				int count = scanner.nextInt();
+				if ( count <= 0 ) break;
+				for(int i=0; i<count; ++i)
 					new Thread(onSend).start();
 			}
 		}
