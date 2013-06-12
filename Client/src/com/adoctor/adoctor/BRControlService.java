@@ -77,10 +77,9 @@ public class BRControlService extends Service {
 
 		// 내일 0시 0분에 처음 시작해서, 24시간 마다 실행되게
 		GregorianCalendar tomorrow = new GregorianCalendar();
-		tomorrow = new GregorianCalendar(tomorrow.get(Calendar.YEAR),tomorrow.get(Calendar.MONTH),tomorrow.get(Calendar.DATE));
-		tomorrow.add(Calendar.DATE, 1);
+		tomorrow.add(Calendar.MINUTE, 30);
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-		am.setRepeating(AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
+		am.setInexactRepeating(AlarmManager.RTC_WAKEUP, tomorrow.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, sender);
 	}
 	
 	public void unregisterSendAlarm() {
